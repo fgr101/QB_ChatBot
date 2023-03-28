@@ -1,3 +1,5 @@
+'
+
 DECLARE SUB Task1 ()
 DECLARE SUB Save ()
 DECLARE SUB Load ()
@@ -8,10 +10,14 @@ DIM SHARED UserInput AS STRING
 
 'Variables for RANDOMIZARION (most of them ARRAYS)
 
+DIM SHARED rolld3 AS INTEGER
 DIM SHARED height(10) AS STRING
 DIM SHARED eyes(10) AS STRING
 DIM SHARED hair(10) AS STRING
 DIM SHARED HairColor(10) AS STRING
+
+DIM newString AS STRING
+DIM i AS INTEGER
 
 
 'Variables for reminders, tasks and notes.
@@ -98,7 +104,6 @@ DO     'LOOP starts.
 	'eliminate any special characters like !?,.' etc. from the users
 	'answer and then store it in the variable UserInput.
 
-	DIM newString AS STRING
 	newString = ""
 
 	FOR i = 1 TO LEN(UserInput)
@@ -185,9 +190,22 @@ THEN
 			CASE "TASK", "REMIND ME OF AN IMPORTAN TASK", "IMPORTANT TASK"
 			
 				Task1
+				
+			CASE "WHAT DO YOU HAVE FOR ME"
 			
+				PRINT "Don't forget the next >>> "; reminder
+				PRINT "Remember you have an important task to do >>> "; Task
+			 
+			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHIHNG"
+				
+				reminder = ""
+				Task = ""
+				
+				PRINT "Great! There's nothing to remind you of."
+						
 			CASE "F1", "COMMANDS", "WHAT CAN YOU DO FOR ME", "WHAT CAN YOU DO", "WHAT ARE THE COMMANDS", "SHOW ME THE HELP", "SHOW HELP", "PLEASE TELL ME THE COMMANDS", "HELP", "HELP ME", "CAN YOU HELP ME", "TELL ME THE COMMANDS PLEASE"
 
+				PRINT "Sure!"
 				PRINT
 				PRINT "Here is a list of the commands and requests you can use with me: "
 				PRINT
@@ -195,9 +213,12 @@ THEN
 				PRINT "What date is it? - To ask for the current date."
 				PRINT "Remind me - Ask me to remind you about something."
 				PRINT "Task - I will remind you of something you have to do."
+				PRINT "Forget everything - I will forget all tasks and reminders."
+				PRINT "What do you have for me? - I'll tell you all your tasks and reminders."
 
 			CASE ""
-
+			
+					
 			CASE "END", "CLOSE", "BYE", "OK BYE"
 
 				PRINT "Bye! I hope to see you soon!"
