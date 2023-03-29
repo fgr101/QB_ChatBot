@@ -1,5 +1,6 @@
 '
-
+DECLARE SUB RNumber3 ()
+DECLARE SUB RNumber10 ()
 DECLARE SUB Task1 ()
 DECLARE SUB Save ()
 DECLARE SUB Load ()
@@ -10,7 +11,9 @@ DIM SHARED UserInput AS STRING
 
 'Variables for RANDOMIZARION (most of them ARRAYS)
 
-DIM SHARED rolld3 AS INTEGER
+DIM SHARED D3 AS INTEGER
+DIM SHARED D10 AS INTEGER
+
 DIM SHARED height(10) AS STRING
 DIM SHARED eyes(10) AS STRING
 DIM SHARED hair(10) AS STRING
@@ -77,6 +80,8 @@ Load
 '=============================================================================
 
 RandomIni 'PRODUCES VARIABLES RANDOMIZATION
+
+RANDOMIZE TIMER
 
 CLS
 PRINT "- Hi! Welcome to QB ChatBot."
@@ -196,6 +201,18 @@ THEN
 				PRINT "Don't forget the next >>> "; reminder
 				PRINT "Remember you have an important task to do >>> "; Task
 			 
+			CASE "FORGET REMINDER"
+			
+				reminder = ""
+				
+				PRINT "Right! I forgot the reminder."
+				
+			CASE "FORGET TASK"
+			
+				Task = ""
+			
+				PRINT "Right! I forgot the task."
+			
 			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHIHNG"
 				
 				reminder = ""
@@ -214,10 +231,59 @@ THEN
 				PRINT "Remind me - Ask me to remind you about something."
 				PRINT "Task - I will remind you of something you have to do."
 				PRINT "Forget everything - I will forget all tasks and reminders."
-				PRINT "What do you have for me? - I'll tell you all your tasks and reminders."
+				PRINT "Forget reminder - I will forget the reminder."
+				PRINT "Forget task - I will forget the task."
+				PRINT "What do you have for me? - I'll tell you about all your tasks and reminders."
+				PRINT "I'm bored, what can I do? - I'll suggest you some random activity for you to do."
+				PRINT "Bye - I will finish our conversation and close this program."
+				
 
 			CASE ""
 			
+			CASE "IM BORED WHAT CAN I DO", "WHAT CAN I DO", "IM BORED", "WHAT TO DO WHEN IM BORED", "WHAT TO DO WHEN BORED", "SUGGEST SOMETHING TO DO", "WHAT TO DO"
+			
+				RNumber10
+				
+				SELECT CASE D10
+				
+					CASE 1
+					
+					PRINT "Use your free time to read an insteresting book."
+					
+					CASE 2
+					
+					PRINT "Use your free time to workout and exercise a little."
+					
+					CASE 3
+					
+					PRINT "Use your free time to study something interesting that you like."
+					
+					CASE 4
+					
+					PRINT "Use your free time to watch a movie or tv series."
+				
+					CASE 5
+					
+					PRINT "Use your free time to go for a walk. You can take your dog with you if you have one."
+				
+					CASE 6
+					
+					PRINT "Use your free time to ride bike or go for a running."
+					
+					CASE 7
+					
+					PRINT "Use your free time to cook something, you could also drink some wine or make a coffee."
+					
+					CASE 8
+					
+					PRINT "Use your free time to relax and practice meditation. There are some good guided meditations available on the internet"
+					
+					CASE ELSE
+					
+					PRINT "Use your free time to send a message to a friend or someone in your family."
+					
+				END SELECT
+				
 					
 			CASE "END", "CLOSE", "BYE", "OK BYE"
 
@@ -270,32 +336,33 @@ SUB RandomIni
 	height(2) = "tall"
 	height(3) = "not short but not very tall"
 
-	rolld3 = INT(RND * 3) + 1
+	RNumber3
 
-	height(10) = height(rolld3)
+	height(10) = height(D3)
 
 	eyes(1) = "brown"
 	eyes(2) = "green"
 	eyes(3) = "blue"
 
-	rolld3 = INT(RND * 3) + 1
+	RNumber3
 
-	eyes(10) = eyes(rolld3)
+	eyes(10) = eyes(D3)
 
 	hair(1) = "short"
 	hair(2) = "long"
 	hair(3) = "no"
 
-	rolld3 = INT(RND * 3) + 1
+	RNumber3
 
-	hair(10) = hair(rolld3)
+	hair(10) = hair(D3)
 
 	HairColor(1) = "black"
 	HairColor(2) = "brown"
 	HairColor(3) = "blond"
 
-	rolld3 = INT(RND * 3) + 1
-	HairColor(10) = HairColor(rolld3)
+	RNumber3
+
+	HairColor(10) = HairColor(D3)
 
 
 
@@ -309,6 +376,18 @@ SUB RemindMe
 	INPUT reminder
 	PRINT "Ok, I will remind you the next: "; reminder
 	
+END SUB
+
+SUB RNumber10
+
+D10 = INT(RND * 10) + 1
+
+END SUB
+
+SUB RNumber3
+
+D3 = INT(RND * 3) + 1
+
 END SUB
 
 ' ================= SAVE ==========================
