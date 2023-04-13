@@ -1,7 +1,9 @@
+DECLARE SUB ShowTasks ()
+DECLARE SUB ForgetTasks ()
 '
 DECLARE SUB RNumber3 ()
 DECLARE SUB RNumber10 ()
-DECLARE SUB Task1 ()
+DECLARE SUB WriteTasks ()
 DECLARE SUB Save ()
 DECLARE SUB Load ()
 DECLARE SUB RemindMe ()
@@ -22,11 +24,13 @@ DIM SHARED HairColor(10) AS STRING
 DIM newString AS STRING
 DIM i AS INTEGER
 
+DIM SHARED counter AS INTEGER
+DIM SHARED TaskNumber AS INTEGER
 
 'Variables for reminders, tasks and notes.
 
 DIM SHARED reminder AS STRING
-DIM SHARED Task AS STRING
+DIM SHARED Task(10) AS STRING
 
 'FILE SYSTEM
 'Checking FILES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -73,6 +77,9 @@ PRINT "brain.dat File created."
 END IF
 CLOSE #1
 
+
+TaskNumber = 0
+
 '=============================================================================
 
 Load
@@ -83,15 +90,19 @@ RandomIni 'PRODUCES VARIABLES RANDOMIZATION
 
 RANDOMIZE TIMER
 
+COLOR 7
+
 CLS
 PRINT "- Hi! Welcome to QB ChatBot."
 
-IF NOT reminder = "" THEN
-PRINT "Don't forget the next >>> "; reminder
-END IF
+'IF NOT reminder() = "" THEN
+'PRINT "Don't forget the next >>> "; reminder
+'END IF
 
-IF NOT Task = "" THEN
-PRINT "Remember you have an important task to do >>> "; Task
+IF NOT Task(TaskNumber) = "" THEN
+
+	ShowTasks
+
 END IF
 
 DO     'LOOP starts.
@@ -143,7 +154,7 @@ THEN
 
 			CASE "TELL ME SOMETHING ABOUT YOURSELF", "TELL ME ABOUT YOURSELF", "TELL ME ABOUT YOU"
 
-			      DescribeYourself
+			    DescribeYourself
 					      
 			CASE "DESCRIBE YOURSELF", "HOW YOU LOOK LIKE", "DO YOU HAVE A PHYSICAL APPEARENCE"
 
@@ -194,29 +205,37 @@ THEN
 			
 			CASE "TASK", "REMIND ME OF AN IMPORTAN TASK", "IMPORTANT TASK"
 			
-				Task1
+				WriteTasks
 				
 			CASE "WHAT DO YOU HAVE FOR ME"
 			
 				PRINT "Don't forget the next >>> "; reminder
-				PRINT "Remember you have an important task to do >>> "; Task
-			 
+				
+				IF Task(1) = "" AND Task(2) = "" AND Task(5) = "" AND Task(7) = "" THEN
+
+					PRINT "I don't have any tasks for you."
+
+				ELSE
+
+				ShowTasks
+
+				END IF
+
 			CASE "FORGET REMINDER"
 			
 				reminder = ""
 				
 				PRINT "Right! I forgot the reminder."
 				
-			CASE "FORGET TASK"
+			CASE "FORGET TASKS", "FORGET TASK"
 			
-				Task = ""
-			
-				PRINT "Right! I forgot the task."
+				ForgetTasks
+				PRINT "Right! I forgot the tasks."
 			
 			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHIHNG"
 				
 				reminder = ""
-				Task = ""
+				ForgetTasks
 				
 				PRINT "Great! There's nothing to remind you of."
 						
@@ -285,7 +304,7 @@ THEN
 				END SELECT
 				
 					
-			CASE "END", "CLOSE", "BYE", "OK BYE"
+			CASE "END", "CLOSE", "BYE", "OK BYE", "EXIT"
 
 				PRINT "Bye! I hope to see you soon!"
 
@@ -314,6 +333,19 @@ SUB DescribeYourself
 
 END SUB
 
+SUB ForgetTasks
+
+counter = 0
+
+DO UNTIL counter = 10
+
+	Task(counter) = ""
+	counter = counter + 1
+
+LOOP
+
+END SUB
+
 SUB Load
 
 '====================== LOAD ======================
@@ -322,11 +354,39 @@ SUB Load
 
 OPEN "brain.dat" FOR INPUT AS #1
 INPUT #1, reminder
-INPUT #1, Task
+
+counter = 0  '================ LOADING TASKS
+
+DO UNTIL counter = 10
+
+	INPUT #1, Task(counter)
+	counter = counter + 1
+
+LOOP
+
 
 CLOSE #1
 
+COLOR 9
+
+PRINT
 PRINT "Loading..."
+
+END SUB
+
+SUB Notes
+
+' TO DO
+
+' - The ChatBot is able to remember at least 10 different reminders for you.
+' - The ChatBot is able to forget these 10 reminders.
+' - The ChatBot tells you when there aren't any reminders for you.
+
+' DONE
+
+' - The ChatBot is able to remember at least 10 different tasks for you.
+' - The ChatBot is able to forget these 10 tasks.
+' - The ChatBot tells you when there aren't any tasks for you.
 
 END SUB
 
@@ -397,7 +457,16 @@ SUB Save
 
 OPEN "brain.dat" FOR OUTPUT AS #1
 WRITE #1, reminder
-WRITE #1, Task
+
+counter = 0 ' ======================== SAVING TASKS
+
+DO UNTIL counter = 10
+
+	WRITE #1, Task(counter)
+	counter = counter + 1
+
+LOOP
+
 WRITE #1,
 WRITE #1,
 WRITE #1,
@@ -410,17 +479,52 @@ WRITE #1,
 WRITE #1,
 CLOSE #1
 
+COLOR 9
+
+PRINT
 PRINT "Saving..."
 
 END SUB
 
-SUB Task1
+SUB ShowTasks
+
+counter = 0
+
+PRINT
+PRINT "Remember you have some important tasks to do >>> "
+PRINT
+
+DO UNTIL counter = 10
+
+	IF NOT Task(counter) = "" THEN
+
+		PRINT Task(counter)
+
+	END IF
+
+counter = counter + 1
+
+LOOP
+
+PRINT
+
+END SUB
+
+SUB WriteTasks
 
 'Important task COMMAND
 
 PRINT "What is the task?"
-INPUT Task
-PRINT "Ok, I will take notes of the next: "; Task
+INPUT Task(TaskNumber)
+PRINT "Ok, I will take notes of the next: "; Task(TaskNumber)
+
+TaskNumber = TaskNumber + 1
+
+IF TaskNumber = 26 THEN
+
+	TaskNumber = 0
+
+END IF
 
 END SUB
 
