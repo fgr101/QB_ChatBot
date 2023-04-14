@@ -1,6 +1,8 @@
+DECLARE SUB ForgetReminders ()
+DECLARE SUB ShowReminders ()
 DECLARE SUB ShowTasks ()
 DECLARE SUB ForgetTasks ()
-'
+
 DECLARE SUB RNumber3 ()
 DECLARE SUB RNumber10 ()
 DECLARE SUB WriteTasks ()
@@ -26,10 +28,11 @@ DIM i AS INTEGER
 
 DIM SHARED counter AS INTEGER
 DIM SHARED TaskNumber AS INTEGER
+DIM SHARED ReminderNumber AS INTEGER
 
 'Variables for reminders, tasks and notes.
 
-DIM SHARED reminder AS STRING
+DIM SHARED Reminder(10) AS STRING
 DIM SHARED Task(10) AS STRING
 
 'FILE SYSTEM
@@ -79,6 +82,7 @@ CLOSE #1
 
 
 TaskNumber = 0
+ReminderNumber = 0
 
 '=============================================================================
 
@@ -95,9 +99,11 @@ COLOR 7
 CLS
 PRINT "- Hi! Welcome to QB ChatBot."
 
-'IF NOT reminder() = "" THEN
-'PRINT "Don't forget the next >>> "; reminder
-'END IF
+IF NOT Reminder(ReminderNumber) = "" THEN
+
+ShowReminders
+
+END IF
 
 IF NOT Task(TaskNumber) = "" THEN
 
@@ -209,23 +215,32 @@ THEN
 				
 			CASE "WHAT DO YOU HAVE FOR ME"
 			
-				PRINT "Don't forget the next >>> "; reminder
-				
-				IF Task(1) = "" AND Task(2) = "" AND Task(5) = "" AND Task(7) = "" THEN
+
+				IF Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
+
+					PRINT "I don't have any reminders for you."
+
+				ELSE
+
+				ShowReminders
+
+				END IF
+
+				IF Task(1) = "" AND Task(2) = "" AND Task(3) = "" AND Task(5) = "" AND Task(7) = "" THEN
 
 					PRINT "I don't have any tasks for you."
 
 				ELSE
-
+				
 				ShowTasks
 
 				END IF
 
+
 			CASE "FORGET REMINDER"
 			
-				reminder = ""
-				
-				PRINT "Right! I forgot the reminder."
+				ForgetReminders
+				PRINT "Right! I forgot the reminders."
 				
 			CASE "FORGET TASKS", "FORGET TASK"
 			
@@ -234,11 +249,12 @@ THEN
 			
 			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHIHNG"
 				
-				reminder = ""
+				ForgetReminders
 				ForgetTasks
 				
 				PRINT "Great! There's nothing to remind you of."
-						
+				PRINT "No tasks for you to complete."
+
 			CASE "F1", "COMMANDS", "WHAT CAN YOU DO FOR ME", "WHAT CAN YOU DO", "WHAT ARE THE COMMANDS", "SHOW ME THE HELP", "SHOW HELP", "PLEASE TELL ME THE COMMANDS", "HELP", "HELP ME", "CAN YOU HELP ME", "TELL ME THE COMMANDS PLEASE"
 
 				PRINT "Sure!"
@@ -333,6 +349,19 @@ SUB DescribeYourself
 
 END SUB
 
+SUB ForgetReminders
+
+counter = 0
+
+DO UNTIL counter = 10
+
+	Reminder(counter) = ""
+	counter = counter + 1
+
+LOOP
+
+END SUB
+
 SUB ForgetTasks
 
 counter = 0
@@ -353,7 +382,15 @@ SUB Load
 '
 
 OPEN "brain.dat" FOR INPUT AS #1
-INPUT #1, reminder
+
+counter = 0  '================ LOADING REMINDERS
+
+DO UNTIL counter = 10
+
+	INPUT #1, Reminder(counter)
+	counter = counter + 1
+
+LOOP
 
 counter = 0  '================ LOADING TASKS
 
@@ -363,7 +400,6 @@ DO UNTIL counter = 10
 	counter = counter + 1
 
 LOOP
-
 
 CLOSE #1
 
@@ -430,12 +466,20 @@ END SUB
 
 SUB RemindMe
 
-	'Remember command
+'Remember command
 	
-	PRINT "What should I remember?"
-	INPUT reminder
-	PRINT "Ok, I will remind you the next: "; reminder
+PRINT "What should I remember?"
+INPUT Reminder(ReminderNumber)
+PRINT "Ok, I will remind you the next: "; Reminder(ReminderNumber)
 	
+ReminderNumber = ReminderNumber + 1
+
+IF ReminderNumber = 11 THEN
+
+	ReminderNumber = 0
+
+END IF
+
 END SUB
 
 SUB RNumber10
@@ -456,7 +500,15 @@ END SUB
 SUB Save
 
 OPEN "brain.dat" FOR OUTPUT AS #1
-WRITE #1, reminder
+
+counter = 0 ' ======================== SAVING REMINDERS
+
+DO UNTIL counter = 10
+
+	WRITE #1, Reminder(counter)
+	counter = counter + 1
+
+LOOP
 
 counter = 0 ' ======================== SAVING TASKS
 
@@ -483,6 +535,30 @@ COLOR 9
 
 PRINT
 PRINT "Saving..."
+
+END SUB
+
+SUB ShowReminders
+
+counter = 0
+
+PRINT
+PRINT "Don't forget the next >>> "
+PRINT
+
+DO UNTIL counter = 10
+
+	IF NOT Reminder(counter) = "" THEN
+
+		PRINT Reminder(counter)
+
+	END IF
+
+counter = counter + 1
+
+LOOP
+
+PRINT
 
 END SUB
 
@@ -520,7 +596,7 @@ PRINT "Ok, I will take notes of the next: "; Task(TaskNumber)
 
 TaskNumber = TaskNumber + 1
 
-IF TaskNumber = 26 THEN
+IF TaskNumber = 11 THEN
 
 	TaskNumber = 0
 
