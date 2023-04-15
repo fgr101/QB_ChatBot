@@ -1,3 +1,4 @@
+DECLARE SUB RNumber6 ()
 DECLARE SUB ForgetReminders ()
 DECLARE SUB ShowReminders ()
 DECLARE SUB ShowTasks ()
@@ -16,6 +17,7 @@ DIM SHARED UserInput AS STRING
 'Variables for RANDOMIZARION (most of them ARRAYS)
 
 DIM SHARED D3 AS INTEGER
+DIM SHARED D6 AS INTEGER
 DIM SHARED D10 AS INTEGER
 
 DIM SHARED height(10) AS STRING
@@ -97,8 +99,8 @@ RANDOMIZE TIMER
 COLOR 7
 
 CLS
-PRINT "- Hi! Welcome to QB ChatBot."
-
+PRINT "- Hi! Welcome to QB ChatBot. Type HELP to see all the commands."
+PRINT "Important: DO NOT use commas when writing."
 IF NOT Reminder(ReminderNumber) = "" THEN
 
 ShowReminders
@@ -190,6 +192,11 @@ THEN
 			CASE "THANKS", "THANK YOU", "OK THANKS"
 
 				PRINT "You are welcome!"
+				
+			CASE "ROLL A DIE", "ROLL A D6", "ROLL A D6 PLEASE", "D6", "PLEASE ROLL A D6", "CAN YOU ROLL A D6 PLEASE", "CAN YOU ROLL A D6", "GIVE ME A D6"
+			
+				RNumber6
+				PRINT "Sure I can do that! ... The D6 DIE shows a "; D6
 
 			CASE "WHAT IS LIFE", "WHATS LIFE"
 			
@@ -252,8 +259,7 @@ THEN
 				ForgetReminders
 				ForgetTasks
 				
-				PRINT "Great! There's nothing to remind you of."
-				PRINT "No tasks for you to complete."
+				PRINT "Great! There's nothing to remind you of and no tasks for you to complete."
 
 			CASE "F1", "COMMANDS", "WHAT CAN YOU DO FOR ME", "WHAT CAN YOU DO", "WHAT ARE THE COMMANDS", "SHOW ME THE HELP", "SHOW HELP", "PLEASE TELL ME THE COMMANDS", "HELP", "HELP ME", "CAN YOU HELP ME", "TELL ME THE COMMANDS PLEASE"
 
@@ -264,6 +270,7 @@ THEN
 				PRINT "What time is it? - To ask for the current time."
 				PRINT "What date is it? - To ask for the current date."
 				PRINT "Remind me - Ask me to remind you about something."
+				PRINT "Roll a D6 - I will roll a D6 DIE and give you the number."
 				PRINT "Task - I will remind you of something you have to do."
 				PRINT "Forget everything - I will forget all tasks and reminders."
 				PRINT "Forget reminder - I will forget the reminder."
@@ -271,7 +278,7 @@ THEN
 				PRINT "What do you have for me? - I'll tell you about all your tasks and reminders."
 				PRINT "I'm bored, what can I do? - I'll suggest you some random activity for you to do."
 				PRINT "Bye - I will finish our conversation and close this program."
-				
+				PRINT
 
 			CASE ""
 			
@@ -420,9 +427,10 @@ SUB Notes
 
 ' DONE
 
-' - The ChatBot is able to remember at least 10 different tasks for you.
-' - The ChatBot is able to forget these 10 tasks.
-' - The ChatBot tells you when there aren't any tasks for you.
+' - ChatBot able to roll a D6 and generate a random number from 1 to 6.
+' - ChatBot able to remember at least 10 different tasks for you.
+' - ChatBot able to forget these 10 tasks.
+' - ChatBot tells you when there aren't any tasks for you.
 
 END SUB
 
@@ -491,6 +499,12 @@ END SUB
 SUB RNumber3
 
 D3 = INT(RND * 3) + 1
+
+END SUB
+
+SUB RNumber6
+
+D6 = INT(RND * 6) + 1
 
 END SUB
 
