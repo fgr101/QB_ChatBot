@@ -4,19 +4,19 @@ Pretty BASIC ChatBot made in Qbasic that is able to respond to some simple sente
 
 ===============================================
 
-Here is a list of the commands and requests you can use: 
+' Here is a list of the commands and requests you can use: 
 
-What time is it? - To ask for the current time.
-What date is it? - To ask for the current date.
-Remind me - To remind you about something.
-Roll a D6 - To roll a D6 DIE.
-Task - It will remind you of something you have to do.
-Forget everything - It will forget all tasks and reminders.
-Forget reminder - It will forget the reminders.
-Forget task - It will forget the tasks.
-What do you have for me? - It'll tell you about all your tasks and reminders.
-I'm bored what can I do? - It'll suggest you some random activity for you to do.
-Bye - It will finish the conversation and end the program.
+' What time is it? - To ask for the current time.
+' What date is it? - To ask for the current date.
+' Remind me - To remind you about something.
+' Roll a D6 - To roll a D6 DIE.
+' Task - It will remind you of something you have to do.
+' Forget everything - It will forget all tasks and reminders.
+' Forget reminder - It will forget the reminders.
+' Forget task - It will forget the tasks.
+' What do you have for me? - It'll tell you about all your tasks and reminders.
+' I'm bored what can I do? - It'll suggest you some random activity for you to do.
+' Bye - It will finish the conversation and end the program.
 
 ===============================================
 
