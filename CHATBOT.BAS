@@ -1,3 +1,4 @@
+DECLARE SUB WaitKey ()
 DECLARE SUB Help ()
 DECLARE SUB RNumber6 ()
 DECLARE SUB ForgetReminders ()
@@ -452,21 +453,41 @@ PRINT "Sure!"
 PRINT
 PRINT "Here is a list of the commands and requests you can use with me: "
 PRINT
-PRINT "What time is it? - To ask for the current time."
-PRINT "What date is it? - To ask for the current date."
-PRINT "Remind me - Ask me to remind you about something."
-PRINT "Roll a D6 - I will roll a D6 DIE and give you the number."
-PRINT "Task - I will remind you of something you have to do."
-PRINT "Forget everything - I will forget all tasks and reminders."
-PRINT "Forget reminder - I will forget the reminder."
-PRINT "Forget task - I will forget the task."
-PRINT "What do you have for me? - I'll tell you about all your tasks and reminders."
-PRINT "I'm bored, what can I do? - I'll suggest you some random activity for you to do."
-PRINT "ABOUT: I will show current software version and other relevant information."
-PRINT "CLEAR SCREEN: I will CLS the screen."
-PRINT "AGAIN: I will repeat the last command."
-PRINT "Bye - I will finish our conversation and close this program."
+PRINT "WHAT TIME IS IT? - Ask for the current time."
+PRINT "WHAT DATE IS IT? - Ask for the current date."
+PRINT "REMIND ME - Ask to set a reminder."
+PRINT "TASK - Ask to add a task to your to-do list."
+PRINT "ROLL A D6 - Roll a six-sided die and provide the result."
+PRINT "FORGET REMINDER - Ask to delete a previously set reminder."
+PRINT "FORGET TASK - Ask to delete a previously added task."
+PRINT "FORGET EVERYTHING - Ask to delete all tasks and reminders."
+PRINT "WHAT DO YOU HAVE FOR ME? - Show all tasks and reminders."
+PRINT "I'M BORED / WHAT CAN I DO? - Suggest a random activity to do."
+PRINT "ABOUT - Show software version and other relevant information."
+PRINT "CLEAR SCREEN / CLS - Clear the screen."
+PRINT "AGAIN / REPEAT - Repeat the last command."
+PRINT "BYE - End the conversation and close the program."
 PRINT
+
+WaitKey
+
+PRINT "USAGE:"
+PRINT
+PRINT "To use any of the commands, simply type the command in the chatbot program"
+PRINT "and hit ENTER. The program will respond with the appropriate information"
+PRINT "or action."
+
+WaitKey
+
+PRINT
+PRINT "Note: Make sure to spell the commands correctly and use proper punctuation."
+PRINT "The chatbot program may not understand incorrectly spelled words or commands."
+PRINT "Do not use comas when writing."
+PRINT
+
+WaitKey
+
+PRINT "- That is all. "
 
 END SUB
 
@@ -690,6 +711,13 @@ counter = counter + 1
 LOOP
 
 PRINT
+
+END SUB
+
+SUB WaitKey
+
+DO WHILE INKEY$ = ""
+LOOP
 
 END SUB
 
