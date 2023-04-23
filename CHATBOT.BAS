@@ -1,3 +1,4 @@
+DECLARE SUB Help ()
 DECLARE SUB RNumber6 ()
 DECLARE SUB ForgetReminders ()
 DECLARE SUB ShowReminders ()
@@ -36,6 +37,7 @@ DIM SHARED ReminderNumber AS INTEGER
 
 DIM SHARED Reminder(10) AS STRING
 DIM SHARED Task(10) AS STRING
+DIM SHARED Again AS STRING
 
 'FILE SYSTEM
 'Checking FILES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -82,7 +84,6 @@ PRINT "brain.dat File created."
 END IF
 CLOSE #1
 
-
 TaskNumber = 0
 ReminderNumber = 0
 
@@ -115,7 +116,8 @@ END IF
 
 DO     'LOOP starts.
 	
-       
+       Again = UserInput 'Variable that remembers the last command.
+
        INPUT "* ", UserInput
        PRINT "- ";
 
@@ -144,6 +146,8 @@ THEN
 	UserInput = newString
 	'PRINT UserInput
 	
+RepeatAgain:
+
 '=============================================================================
 
 		SELECT CASE UCASE$(UserInput)
@@ -193,10 +197,72 @@ THEN
 
 				PRINT "You are welcome!"
 				
-			CASE "ROLL A DIE", "ROLL A D6", "ROLL A D6 PLEASE", "D6", "PLEASE ROLL A D6", "CAN YOU ROLL A D6 PLEASE", "CAN YOU ROLL A D6", "GIVE ME A D6"
+			CASE "ROLL A DIE", "ROLL A D6", "ROLL D6", "ROLL A D6 PLEASE", "D6", "PLEASE ROLL A D6", "CAN YOU ROLL A D6 PLEASE", "CAN YOU ROLL A D6", "GIVE ME A D6"
 			
 				RNumber6
 				PRINT "Sure I can do that! ... The D6 DIE shows a "; D6
+
+				PRINT
+
+				SELECT CASE D6
+
+					 CASE 1
+
+						PRINT "+=======+"
+						PRINT "|       |"
+						PRINT "|   *   |"
+						PRINT "|       |"
+						PRINT "+=======+"
+
+					 CASE 2
+
+						PRINT "+=======+"
+						PRINT "|       |"
+						PRINT "|  * *  |"
+						PRINT "|       |"
+						PRINT "+=======+"
+
+
+					 CASE 3
+
+						PRINT "+=======+"
+						PRINT "|  *    |"
+						PRINT "|   *   |"
+						PRINT "|    *  |"
+						PRINT "+=======+"
+
+					 CASE 4
+
+						PRINT "+=======+"
+						PRINT "|  * *  |"
+						PRINT "|       |"
+						PRINT "|  * *  |"
+						PRINT "+=======+"
+					 
+					 CASE 5
+				 
+						PRINT "+=======+"
+						PRINT "|  * *  |"
+						PRINT "|   *   |"
+						PRINT "|  * *  |"
+						PRINT "+=======+"
+
+					 CASE 6
+
+						PRINT "+=======+"
+						PRINT "|  * *  |"
+						PRINT "|  * *  |"
+						PRINT "|  * *  |"
+						PRINT "+=======+"
+					 
+				END SELECT
+			     
+			PRINT
+
+			CASE "AGAIN", "REPEAT" 'Repeats the last command
+
+			 UserInput = Again
+			 GOTO RepeatAgain
 
 			CASE "WHAT IS LIFE", "WHATS LIFE"
 			
@@ -263,22 +329,7 @@ THEN
 
 			CASE "F1", "COMMANDS", "WHAT CAN YOU DO FOR ME", "WHAT CAN YOU DO", "WHAT ARE THE COMMANDS", "SHOW ME THE HELP", "SHOW HELP", "PLEASE TELL ME THE COMMANDS", "HELP", "HELP ME", "CAN YOU HELP ME", "TELL ME THE COMMANDS PLEASE"
 
-				PRINT "Sure!"
-				PRINT
-				PRINT "Here is a list of the commands and requests you can use with me: "
-				PRINT
-				PRINT "What time is it? - To ask for the current time."
-				PRINT "What date is it? - To ask for the current date."
-				PRINT "Remind me - Ask me to remind you about something."
-				PRINT "Roll a D6 - I will roll a D6 DIE and give you the number."
-				PRINT "Task - I will remind you of something you have to do."
-				PRINT "Forget everything - I will forget all tasks and reminders."
-				PRINT "Forget reminder - I will forget the reminder."
-				PRINT "Forget task - I will forget the task."
-				PRINT "What do you have for me? - I'll tell you about all your tasks and reminders."
-				PRINT "I'm bored, what can I do? - I'll suggest you some random activity for you to do."
-				PRINT "Bye - I will finish our conversation and close this program."
-				PRINT
+			       Help
 
 			CASE ""
 			
@@ -326,7 +377,20 @@ THEN
 					
 				END SELECT
 				
-					
+			CASE "CLS", "CLEAR SCREEN", "CLEAR THE SCREEN", "CLEAR"
+
+				CLS
+
+			CASE "ABOUT"
+
+				PRINT
+				PRINT "ArtInt QB ChatBot - V.0.2"
+				PRINT "This is an Open Source and Free Software."
+				PRINT "Made in Qbasic by Fernando Gaston Ramirez."
+				PRINT "First Version created in March 2023."
+				PRINT "Last Update released in March 2023."
+				PRINT
+
 			CASE "END", "CLOSE", "BYE", "OK BYE", "EXIT"
 
 				PRINT "Bye! I hope to see you soon!"
@@ -382,6 +446,30 @@ LOOP
 
 END SUB
 
+SUB Help
+
+PRINT "Sure!"
+PRINT
+PRINT "Here is a list of the commands and requests you can use with me: "
+PRINT
+PRINT "What time is it? - To ask for the current time."
+PRINT "What date is it? - To ask for the current date."
+PRINT "Remind me - Ask me to remind you about something."
+PRINT "Roll a D6 - I will roll a D6 DIE and give you the number."
+PRINT "Task - I will remind you of something you have to do."
+PRINT "Forget everything - I will forget all tasks and reminders."
+PRINT "Forget reminder - I will forget the reminder."
+PRINT "Forget task - I will forget the task."
+PRINT "What do you have for me? - I'll tell you about all your tasks and reminders."
+PRINT "I'm bored, what can I do? - I'll suggest you some random activity for you to do."
+PRINT "ABOUT: I will show current software version and other relevant information."
+PRINT "CLEAR SCREEN: I will CLS the screen."
+PRINT "AGAIN: I will repeat the last command."
+PRINT "Bye - I will finish our conversation and close this program."
+PRINT
+
+END SUB
+
 SUB Load
 
 '====================== LOAD ======================
@@ -427,6 +515,11 @@ SUB Notes
 
 ' DONE
 
+' - Help --> Located in the SUB called Help now.
+' - AGAIN: Repeats the last command. Useful when rolling dice for instance.
+' - ABOUT: Shows current software version and other relevant information.
+' - CLEAR SCREEN: you can CLS the screen.
+' - D6 graphics made with ASCII characters.
 ' - ChatBot able to roll a D6 and generate a random number from 1 to 6.
 ' - ChatBot able to remember at least 10 different tasks for you.
 ' - ChatBot able to forget these 10 tasks.
