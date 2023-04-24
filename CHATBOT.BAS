@@ -290,7 +290,7 @@ RepeatAgain:
 			CASE "WHAT DO YOU HAVE FOR ME"
 			
 
-				IF Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
+				IF Reminder(0) = "" AND Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
 
 					PRINT "I don't have any reminders for you."
 
@@ -300,7 +300,7 @@ RepeatAgain:
 
 				END IF
 
-				IF Task(1) = "" AND Task(2) = "" AND Task(3) = "" AND Task(5) = "" AND Task(7) = "" THEN
+				IF Task(0) = "" AND Task(1) = "" AND Task(2) = "" AND Task(3) = "" AND Task(5) = "" AND Task(7) = "" THEN
 
 					PRINT "I don't have any tasks for you."
 
@@ -321,7 +321,7 @@ RepeatAgain:
 				ForgetTasks
 				PRINT "Right! I forgot the tasks."
 			
-			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHIHNG"
+			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHING"
 				
 				ForgetReminders
 				ForgetTasks
@@ -385,10 +385,14 @@ RepeatAgain:
 			CASE "ABOUT"
 
 				PRINT
-				PRINT "ArtInt QB ChatBot - V.0.2"
+				PRINT
+				PRINT "ArtInt QB ChatBot - V.0.2 [2020 - 2023]"
+				PRINT "---------------------------------------"
 				PRINT "This is an Open Source and Free Software."
 				PRINT "Made in Qbasic by Fernando Gaston Ramirez."
-				PRINT "First Version created in March 2023."
+				PRINT "Main concept idea and early version written in C++ in 2020."
+				PRINT "First Qbasic Version, created and rewritten in March 2023."
+				PRINT "Compiled for Win64 using the FreeBasic compiler."
 				PRINT "Last Update released in March 2023."
 				PRINT
 
@@ -460,7 +464,7 @@ PRINT "TASK - Ask to add a task to your to-do list."
 PRINT "ROLL A D6 - Roll a six-sided die and provide the result."
 PRINT "FORGET REMINDER - Ask to delete a previously set reminder."
 PRINT "FORGET TASK - Ask to delete a previously added task."
-PRINT "FORGET EVERYTHING - Ask to delete all tasks and reminders."
+PRINT "FORGET EVERYTHING / FORGET ALL - Ask to delete all tasks and reminders."
 PRINT "WHAT DO YOU HAVE FOR ME? - Show all tasks and reminders."
 PRINT "I'M BORED / WHAT CAN I DO? - Suggest a random activity to do."
 PRINT "ABOUT - Show software version and other relevant information."
@@ -676,8 +680,10 @@ PRINT
 
 DO UNTIL counter = 10
 
+
 	IF NOT Reminder(counter) = "" THEN
 
+		PRINT "-> ";
 		PRINT Reminder(counter)
 
 	END IF
@@ -702,6 +708,7 @@ DO UNTIL counter = 10
 
 	IF NOT Task(counter) = "" THEN
 
+		PRINT "-> ";
 		PRINT Task(counter)
 
 	END IF
