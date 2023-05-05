@@ -103,15 +103,18 @@ COLOR 7
 CLS
 PRINT "- Hi! Welcome to QB ChatBot. Type HELP to see all the commands."
 PRINT "Important: DO NOT use commas when writing."
+
 IF NOT Reminder(ReminderNumber) = "" THEN
 
-ShowReminders
+	ShowReminders
+	BEEP
 
 END IF
 
 IF NOT Task(TaskNumber) = "" THEN
 
 	ShowTasks
+	BEEP
 
 END IF
 
@@ -119,7 +122,7 @@ DO     'LOOP starts.
 	
        Again = UserInput 'Variable that remembers the last command.
 
-       INPUT "* ", UserInput
+       LINE INPUT "* ", UserInput
        PRINT "- ";
 
 '=============================================================================
@@ -540,6 +543,13 @@ SUB Notes
 
 ' DONE
 
+'V 0.2
+
+' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.f
+
+'V 0.1
+
+' - SOUND: Notification sound when you have a task or a reminder.
 ' - Help --> Located in the SUB called Help now.
 ' - AGAIN: Repeats the last command. Useful when rolling dice for instance.
 ' - ABOUT: Shows current software version and other relevant information.
@@ -595,7 +605,7 @@ SUB RemindMe
 'Remember command
 	
 PRINT "What should I remember?"
-INPUT Reminder(ReminderNumber)
+LINE INPUT Reminder(ReminderNumber)
 PRINT "Ok, I will remind you the next: "; Reminder(ReminderNumber)
 	
 ReminderNumber = ReminderNumber + 1
