@@ -323,7 +323,7 @@ RepeatAgain:
 				ForgetTasks
 				PRINT "Right! I forgot the tasks."
 			
-			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHING"
+			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHING", "DELETE ALL"
 				
 				ForgetReminders
 				ForgetTasks
