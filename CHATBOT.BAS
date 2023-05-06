@@ -102,7 +102,6 @@ COLOR 7
 
 CLS
 PRINT "- Hi! Welcome to QB ChatBot. Type HELP to see all the commands."
-PRINT "Important: DO NOT use commas when writing."
 
 IF NOT Reminder(ReminderNumber) = "" THEN
 
@@ -398,6 +397,11 @@ RepeatAgain:
 				PRINT "Compiled for Win64 using the FreeBasic compiler."
 				PRINT "Last Update released in March 2023."
 				PRINT
+				PRINT "Contributors: "
+				PRINT
+				PRINT "Ahmad from Syria (Ahmad-511 on GitHub)"
+				PRINT
+				PRINT "Thank you so much!"
 
 			CASE "END", "CLOSE", "BYE", "OK BYE", "EXIT"
 
@@ -489,7 +493,6 @@ WaitKey
 PRINT
 PRINT "Note: Make sure to spell the commands correctly and use proper punctuation."
 PRINT "The chatbot program may not understand incorrectly spelled words or commands."
-PRINT "Do not use comas when writing."
 PRINT
 
 WaitKey
@@ -545,7 +548,7 @@ SUB Notes
 
 'V 0.2
 
-' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.f
+' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.
 
 'V 0.1
 
@@ -743,7 +746,7 @@ SUB WriteTasks
 'Important task COMMAND
 
 PRINT "What is the task?"
-INPUT Task(TaskNumber)
+LINE INPUT Task(TaskNumber)
 PRINT "Ok, I will take notes of the next: "; Task(TaskNumber)
 
 TaskNumber = TaskNumber + 1
