@@ -1,3 +1,4 @@
+DECLARE SUB ShowContacts ()
 DECLARE SUB AddContact ()
 DECLARE SUB PersonalContacts ()
 DECLARE SUB WaitKey ()
@@ -45,11 +46,11 @@ DIM SHARED Again AS STRING
 ' Personal Contacts
 
 DIM SHARED AgendaID AS INTEGER
-DIM SHARED AgendaPhoneNumber(100) AS STRING
-DIM SHARED AgendaCBU(100) AS STRING
 DIM SHARED AgendaName(100) AS STRING
+DIM SHARED AgendaPhoneNumber(100) AS STRING
 DIM SHARED AgendaEmail(100) AS STRING
 DIM SHARED AgendaAddress(100) AS STRING
+DIM SHARED AgendaCBU(100) AS STRING
 
 AgendaID = 0
 
@@ -61,39 +62,49 @@ OPEN "brain.dat" FOR BINARY AS #1
 IF LOF(1) = 0 THEN
 CLOSE #1
 OPEN "brain.dat" FOR OUTPUT AS #1
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
-WRITE #1, ""
+
+counter = 0
+DO UNTIL counter = 10000
+
+	WRITE #1, ""
+	counter = counter + 1
+
+LOOP
+
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+'WRITE #1, ""
+
 PRINT "brain.dat File created."
 END IF
 CLOSE #1
@@ -172,18 +183,9 @@ RepeatAgain:
 
 				AddContact
 
-			CASE "SHOW ME THE CONTACTS"
+			CASE "SHOW CONTACTS"
 			      
-				counter = 0
-				DO UNTIL counter = 100
-
-					IF AgendaName(counter) = "" THEN
-						counter = 99
-					END IF
-
-					PRINT AgendaName(counter)
-					counter = counter + 1
-				LOOP
+				ShowContacts
 
 			CASE "HELLO", "HI", "HEY", "HI QB", "WHATS UP"
 				
@@ -446,7 +448,7 @@ RepeatAgain:
 				PRINT "At the moment I can only answer to specific requests and very common questions."
 				PRINT "I'm sorry, I don't understand. Can you try asking a different question?"
 				PRINT "Please, avoid using any kind of punctuation when writing. I still don't know"
-				PRINT "how to deal with some of them. Do not use comas."
+				PRINT "how to deal with some of them."
 
 		END SELECT
 
@@ -460,12 +462,21 @@ PRINT "Sure! If you don't have the information asked don't write anything."
 PRINT "Just leave it blank. Ok? ... What is his/her full name?"
 LINE INPUT "* ", AgendaName(AgendaID)
 PRINT "What is "; AgendaName(AgendaID); "'s number?"
-INPUT "* ", AgendaPhoneNumber(AgendaID)
+LINE INPUT "* ", AgendaPhoneNumber(AgendaID)
 PRINT "What is "; AgendaName(AgendaID); "'s email address?"
-INPUT "* ", AgendaEmail(AgendaID)
+LINE INPUT "* ", AgendaEmail(AgendaID)
+PRINT "What is "; AgendaName(AgendaID); "'s address?"
+LINE INPUT "* ", AgendaAddress(AgendaID)
+PRINT "What is "; AgendaName(AgendaID); "'s Bank Transfer Number (CBU)?"
+LINE INPUT "* ", AgendaCBU(AgendaID)
 
+
+PRINT
 PRINT "- His/her name is "; AgendaName(AgendaID); ". Phone number "; AgendaPhoneNumber(AgendaID); "."
-PRINT AgendaName(AgendaID); "'s email is "; AgendaEmail(AgendaID); "."
+PRINT AgendaName(AgendaID); "'s email is "; AgendaEmail(AgendaID); "."; AgendaAddress(AgendaID); "."
+PRINT "Bank Transference Number (CBU): "; AgendaCBU(AgendaID)
+
+
 
 AgendaID = AgendaID + 1
 
@@ -575,9 +586,23 @@ DO UNTIL counter = 10
 
 LOOP
 
-CLOSE #1
+counter = 0  '================ LOADING CONTACTS
 
-COLOR 9
+INPUT #1, AgendaID
+
+DO UNTIL counter = 100
+
+	INPUT #1, AgendaName(counter)
+	INPUT #1, AgendaPhoneNumber(counter)
+	INPUT #1, AgendaEmail(counter)
+	INPUT #1, AgendaAddress(counter)
+	INPUT #1, AgendaCBU(counter)
+
+	counter = counter + 1
+
+LOOP
+
+CLOSE #1
 
 PRINT
 PRINT "Loading..."
@@ -738,12 +763,51 @@ WRITE #1,
 WRITE #1,
 WRITE #1,
 WRITE #1,
-CLOSE #1
 
-COLOR 9
+counter = 0 ' ======================== SAVING CONTACTS
+
+WRITE #1, AgendaID
+
+DO UNTIL counter = 100
+
+	WRITE #1, AgendaName(counter)
+	WRITE #1, AgendaPhoneNumber(counter)
+	WRITE #1, AgendaEmail(counter)
+	WRITE #1, AgendaAddress(counter)
+	WRITE #1, AgendaCBU(counter)
+
+	counter = counter + 1
+
+LOOP
+
+CLOSE #1
 
 PRINT
 PRINT "Saving..."
+
+END SUB
+
+SUB ShowContacts
+
+counter = 0
+
+PRINT
+
+DO UNTIL counter = 101
+
+	PRINT "# "; AgendaName(counter); " | "; AgendaPhoneNumber(counter); " | "; AgendaEmail(counter)
+	PRINT "# "; AgendaAddress(counter); " | "; AgendaCBU(counter)
+
+	counter = counter + 1
+
+	IF AgendaName(counter) = "" THEN
+
+		counter = 101
+
+	END IF
+
+
+LOOP
 
 END SUB
 
