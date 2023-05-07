@@ -1,3 +1,5 @@
+DECLARE SUB AddContact ()
+DECLARE SUB PersonalContacts ()
 DECLARE SUB WaitKey ()
 DECLARE SUB Help ()
 DECLARE SUB RNumber6 ()
@@ -34,11 +36,22 @@ DIM SHARED counter AS INTEGER
 DIM SHARED TaskNumber AS INTEGER
 DIM SHARED ReminderNumber AS INTEGER
 
-'Variables for reminders, tasks and notes.
+' Variables for reminders, tasks and notes.
 
 DIM SHARED Reminder(10) AS STRING
 DIM SHARED Task(10) AS STRING
 DIM SHARED Again AS STRING
+
+' Personal Contacts
+
+DIM SHARED AgendaID AS INTEGER
+DIM SHARED AgendaPhoneNumber(100) AS STRING
+DIM SHARED AgendaCBU(100) AS STRING
+DIM SHARED AgendaName(100) AS STRING
+DIM SHARED AgendaEmail(100) AS STRING
+DIM SHARED AgendaAddress(100) AS STRING
+
+AgendaID = 0
 
 'FILE SYSTEM
 'Checking FILES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -154,6 +167,23 @@ RepeatAgain:
 '=============================================================================
 
 		SELECT CASE UCASE$(UserInput)
+
+			CASE "ADD CONTACT"
+
+				AddContact
+
+			CASE "SHOW ME THE CONTACTS"
+			      
+				counter = 0
+				DO UNTIL counter = 100
+
+					IF AgendaName(counter) = "" THEN
+						counter = 99
+					END IF
+
+					PRINT AgendaName(counter)
+					counter = counter + 1
+				LOOP
 
 			CASE "HELLO", "HI", "HEY", "HI QB", "WHATS UP"
 				
@@ -280,15 +310,16 @@ RepeatAgain:
 				PRINT "I used to live in the 'cerrado brasileiro', but now I live in your computer's"
 				PRINT "drive or somewhere on the internet I guess."
 
-			CASE "REMIND ME OF SOMETHING", "REMIND ME", "REMEMBER", "REMEMBER SOMETHING"
+			CASE "REMIND ME OF SOMETHING", "REMIND ME", "REMEMBER", "REMEMBER SOMETHING", "NEW REMINDER"
 
 				RemindMe
 
 			
-			CASE "TASK", "REMIND ME OF AN IMPORTAN TASK", "IMPORTANT TASK"
+			CASE "TASK", "NEW TASK", "REMIND ME OF AN IMPORTAN TASK", "IMPORTANT TASK"
 			
 				WriteTasks
 				
+
 			CASE "WHAT DO YOU HAVE FOR ME"
 			
 
@@ -423,6 +454,23 @@ RepeatAgain:
 
 LOOP
 
+SUB AddContact
+
+PRINT "Sure! If you don't have the information asked don't write anything."
+PRINT "Just leave it blank. Ok? ... What is his/her full name?"
+LINE INPUT "* ", AgendaName(AgendaID)
+PRINT "What is "; AgendaName(AgendaID); "'s number?"
+INPUT "* ", AgendaPhoneNumber(AgendaID)
+PRINT "What is "; AgendaName(AgendaID); "'s email address?"
+INPUT "* ", AgendaEmail(AgendaID)
+
+PRINT "- His/her name is "; AgendaName(AgendaID); ". Phone number "; AgendaPhoneNumber(AgendaID); "."
+PRINT AgendaName(AgendaID); "'s email is "; AgendaEmail(AgendaID); "."
+
+AgendaID = AgendaID + 1
+
+END SUB
+
 SUB DescribeYourself
 
 	PRINT "I'm "; height(10); ". ";
@@ -539,6 +587,22 @@ END SUB
 SUB Notes
 
 ' TO DO
+
+' - ADD CONTACTS
+' - YOU CAN ADD BANK INFORMATION - CBU TO THE CONTACTS
+' - SHOW ALL CONTACTS
+' _ SHOW A SPECIFFIC CONTACT
+' - SHOW A SPECIFFIC CONTACT CBU
+' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
+' - SHOW A SPECIFFIC CONTACT EMAIL
+' - SHOW A SPECIFFIC CONTACT ADDRESS
+' _ DELETE A SPECIFIC CONTACT
+' - MODIFY A SPECIFFIC CONTACT
+' - SHOW LIST OF EMAILS --> NAME: EMAILS
+' - SHOW LIST OF PHONE NUMBERS --> NAME: NUMBER
+' - SHOW LIST OF ADDRESSES --> NAME: ADDRESS
+
+
 
 ' - The ChatBot is able to remember at least 10 different reminders for you.
 ' - The ChatBot is able to forget these 10 reminders.
