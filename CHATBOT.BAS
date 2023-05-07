@@ -185,6 +185,7 @@ RepeatAgain:
 
 			CASE "SHOW CONTACTS"
 			      
+				PRINT "Showing list of contacts: "
 				ShowContacts
 
 			CASE "HELLO", "HI", "HEY", "HI QB", "WHATS UP"
@@ -536,6 +537,8 @@ PRINT "I'M BORED / WHAT CAN I DO? - Suggest a random activity to do."
 PRINT "ABOUT - Show software version and other relevant information."
 PRINT "CLEAR SCREEN / CLS - Clear the screen."
 PRINT "AGAIN / REPEAT - Repeat the last command."
+PRINT "ADD CONTACT"
+PRINT "SHOW CONTACTS"
 PRINT "BYE - End the conversation and close the program."
 PRINT
 
@@ -613,9 +616,6 @@ SUB Notes
 
 ' TO DO
 
-' - ADD CONTACTS
-' - YOU CAN ADD BANK INFORMATION - CBU TO THE CONTACTS
-' - SHOW ALL CONTACTS
 ' _ SHOW A SPECIFFIC CONTACT
 ' - SHOW A SPECIFFIC CONTACT CBU
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
@@ -627,9 +627,7 @@ SUB Notes
 ' - SHOW LIST OF PHONE NUMBERS --> NAME: NUMBER
 ' - SHOW LIST OF ADDRESSES --> NAME: ADDRESS
 
-
-
-' - The ChatBot is able to remember at least 10 different reminders for you.
+' - The ChatBot is able to remember up to 10 different reminders.
 ' - The ChatBot is able to forget these 10 reminders.
 ' - The ChatBot tells you when there aren't any reminders for you.
 
@@ -638,6 +636,10 @@ SUB Notes
 'V 0.2
 
 ' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.
+'   Solved in the whole program. LINE INPUT insted of INPUT.
+' - ADD CONTACTS [ADD CONTACT] 50% --> Able to store up to 100 contacts.
+' - YOU CAN ADD BANK INFORMATION - CBU TO THE CONTACTS
+' - SHOW ALL CONTACTS [SHOW CONTACTS] 50%
 
 'V 0.1
 
@@ -753,17 +755,6 @@ DO UNTIL counter = 10
 
 LOOP
 
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-WRITE #1,
-
 counter = 0 ' ======================== SAVING CONTACTS
 
 WRITE #1, AgendaID
@@ -797,6 +788,7 @@ DO UNTIL counter = 101
 
 	PRINT "# "; AgendaName(counter); " | "; AgendaPhoneNumber(counter); " | "; AgendaEmail(counter)
 	PRINT "# "; AgendaAddress(counter); " | "; AgendaCBU(counter)
+	PRINT
 
 	counter = counter + 1
 
