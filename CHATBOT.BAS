@@ -1,3 +1,4 @@
+DECLARE SUB Show1Contact ()
 DECLARE SUB ShowContacts ()
 DECLARE SUB AddContact ()
 DECLARE SUB PersonalContacts ()
@@ -51,6 +52,8 @@ DIM SHARED AgendaPhoneNumber(100) AS STRING
 DIM SHARED AgendaEmail(100) AS STRING
 DIM SHARED AgendaAddress(100) AS STRING
 DIM SHARED AgendaCBU(100) AS STRING
+DIM SHARED SearchName AS STRING
+DIM SHARED NameFound AS SINGLE
 
 AgendaID = 0
 
@@ -183,7 +186,11 @@ RepeatAgain:
 
 				AddContact
 
-			CASE "SHOW CONTACTS"
+			CASE "SHOW CONTACT", "SHOW A CONTACT"
+
+				Show1Contact
+
+			CASE "SHOW ALL CONTACTS", "SHOW CONTACTS"
 			      
 				PRINT "Showing list of contacts: "
 				ShowContacts
@@ -202,12 +209,11 @@ RepeatAgain:
 
 			CASE "TELL ME SOMETHING ABOUT YOURSELF", "TELL ME ABOUT YOURSELF", "TELL ME ABOUT YOU"
 
-			    DescribeYourself
+				DescribeYourself
 					      
 			CASE "DESCRIBE YOURSELF", "HOW YOU LOOK LIKE", "DO YOU HAVE A PHYSICAL APPEARENCE"
 
 				DescribeYourself
-
 
 			CASE "WHATS YOUR NAME", "WHO ARE YOU"
 				
@@ -538,7 +544,8 @@ PRINT "ABOUT - Show software version and other relevant information."
 PRINT "CLEAR SCREEN / CLS - Clear the screen."
 PRINT "AGAIN / REPEAT - Repeat the last command."
 PRINT "ADD CONTACT"
-PRINT "SHOW CONTACTS"
+PRINT "SHOW CONTACT"
+PRINT "SHOW ALL CONTACTS"
 PRINT "BYE - End the conversation and close the program."
 PRINT
 
@@ -616,7 +623,6 @@ SUB Notes
 
 ' TO DO
 
-' _ SHOW A SPECIFFIC CONTACT
 ' - SHOW A SPECIFFIC CONTACT CBU
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
 ' - SHOW A SPECIFFIC CONTACT EMAIL
@@ -637,9 +643,11 @@ SUB Notes
 
 ' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.
 '   Solved in the whole program. LINE INPUT insted of INPUT.
+' - AGENDA: CONTACTS
 ' - ADD CONTACTS [ADD CONTACT] 50% --> Able to store up to 100 contacts.
 ' - YOU CAN ADD BANK INFORMATION - CBU TO THE CONTACTS
 ' - SHOW ALL CONTACTS [SHOW CONTACTS] 50%
+' _ SHOW A SPECIFFIC CONTACT
 
 'V 0.1
 
@@ -775,6 +783,49 @@ CLOSE #1
 
 PRINT
 PRINT "Saving..."
+
+END SUB
+
+SUB Show1Contact
+
+PRINT "What contact?"
+LINE INPUT "* "; SearchName
+
+counter = 0
+
+DO UNTIL counter = 101
+
+	IF SearchName = AgendaName(counter) THEN
+
+		PRINT "- Right! Here it is!"
+
+		PRINT
+		PRINT "# "; AgendaName(counter); " | "; AgendaPhoneNumber(counter); " | "; AgendaEmail(counter)
+		PRINT "# "; AgendaAddress(counter); " | "; AgendaCBU(counter)
+		PRINT
+
+		NameFound = 1
+
+	END IF
+
+	IF AgendaName(counter) = "" THEN
+
+		counter = 100
+
+		IF NameFound = 0 THEN
+
+			PRINT "Sadly, I wasn't able to find the contact you are looking for. "
+			PRINT "Are you sure the name is correct? Try with [show all contacts]."
+
+		END IF
+
+	END IF
+
+	counter = counter + 1
+
+LOOP
+
+NameFound = 0
 
 END SUB
 
