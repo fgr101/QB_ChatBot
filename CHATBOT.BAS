@@ -1,3 +1,5 @@
+DECLARE SUB ShowContactsInfo ()
+DECLARE SUB ShowContactsNames ()
 DECLARE SUB Show1Contact ()
 DECLARE SUB ShowContacts ()
 DECLARE SUB AddContact ()
@@ -54,6 +56,8 @@ DIM SHARED AgendaAddress(100) AS STRING
 DIM SHARED AgendaCBU(100) AS STRING
 DIM SHARED SearchName AS STRING
 DIM SHARED NameFound AS SINGLE
+DIM SHARED Show AS STRING
+
 
 AgendaID = 0
 
@@ -182,6 +186,28 @@ RepeatAgain:
 
 		SELECT CASE UCASE$(UserInput)
 
+
+			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"
+
+				Show = "NAMES"
+				ShowContactsInfo
+
+			CASE "SHOW PHONES", "SHOW PHONE NUMBERS", "SHOW ALL PHONE NUMBERS", "SHOW CONTACTS PHONE"
+
+				Show = "PHONES"
+				ShowContactsInfo
+
+
+			CASE "SHOW BANK NUMBERS", "SHOW ALL BANK NUMBERS", "SHOW CONTACTS BANK", "SHOW CONTACTS CBU", "SHOW ALL CBUS", "SHOW CBUS"
+
+				Show = "CBU"
+				ShowContactsInfo
+
+			CASE "SHOW ALL EMAILS", "SHOW CONTACTS EMAILS", "SHOW EMAILS"
+
+				Show = "EMAIL"
+				ShowContactsInfo
+
 			CASE "ADD CONTACT"
 
 				AddContact
@@ -300,6 +326,12 @@ RepeatAgain:
 				END SELECT
 			     
 			PRINT
+
+			' BTC TOOLS [CONTINUE WORKING HERE] ------------------>>> !!!!!!!!!
+			
+			'CASE "LAST BTC BUYING PRICE", "BUYING PRICE"
+			
+			'input "What was the BTC price in US Dollars when you bought it for the last time?"
 
 			CASE "AGAIN", "REPEAT" 'Repeats the last command
 
@@ -851,6 +883,46 @@ DO UNTIL counter = 101
 
 
 LOOP
+
+END SUB
+
+SUB ShowContactsInfo
+
+counter = 0
+
+PRINT
+
+DO UNTIL counter = 101
+
+	IF Show = "NAMES" THEN
+	PRINT "# "; AgendaName(counter); ""
+	END IF
+
+	IF Show = "CBU" THEN
+	PRINT "# "; AgendaCBU(counter); ""
+	END IF
+
+	IF Show = "EMAIL" THEN
+	PRINT "# "; AgendaEmail(counter); ""
+	END IF
+
+	IF Show = "PHONES" THEN
+	PRINT "# "; AgendaPhoneNumber(counter); ""
+	END IF
+
+
+	counter = counter + 1
+
+	IF AgendaName(counter) = "" THEN
+
+		counter = 101
+
+	END IF
+
+
+LOOP
+
+PRINT
 
 END SUB
 
