@@ -187,7 +187,7 @@ RepeatAgain:
 		SELECT CASE UCASE$(UserInput)
 
 
-			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"
+			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"   ' CONTACTS ====================================
 
 				Show = "NAMES"
 				ShowContactsInfo
@@ -203,6 +203,12 @@ RepeatAgain:
 				Show = "CBU"
 				ShowContactsInfo
 
+			CASE "SHOW ALL ADDRESSES", "SHOW ADDRESSES", "SHOW ADDRESSES", "ADDRESSES"
+
+				Show = "ADDRESS"
+				ShowContactsInfo
+
+			
 			CASE "SHOW ALL EMAILS", "SHOW CONTACTS EMAILS", "SHOW EMAILS"
 
 				Show = "EMAIL"
@@ -221,8 +227,8 @@ RepeatAgain:
 				PRINT "Showing list of contacts: "
 				ShowContacts
 
-			CASE "HELLO", "HI", "HEY", "HI QB", "WHATS UP"
-				
+			CASE "HELLO", "HI", "HEY", "HI QB", "WHATS UP" ' OTHERS ====================================
+
 				PRINT "Hi there!"
 			
 			CASE "HI HOW ARE YOU", "HOW ARE YOU", "HOWS IT GOING", "HOW ARE YOU DOING"
@@ -659,12 +665,8 @@ SUB Notes
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
 ' - SHOW A SPECIFFIC CONTACT EMAIL
 ' - SHOW A SPECIFFIC CONTACT ADDRESS
-' _ DELETE A SPECIFIC CONTACT
+' - DELETE A SPECIFIC CONTACT
 ' - MODIFY A SPECIFFIC CONTACT
-' - SHOW LIST OF EMAILS --> NAME: EMAILS
-' - SHOW LIST OF PHONE NUMBERS --> NAME: NUMBER
-' - SHOW LIST OF ADDRESSES --> NAME: ADDRESS
-
 ' - The ChatBot is able to remember up to 10 different reminders.
 ' - The ChatBot is able to forget these 10 reminders.
 ' - The ChatBot tells you when there aren't any reminders for you.
@@ -679,7 +681,10 @@ SUB Notes
 ' - ADD CONTACTS [ADD CONTACT] 50% --> Able to store up to 100 contacts.
 ' - YOU CAN ADD BANK INFORMATION - CBU TO THE CONTACTS
 ' - SHOW ALL CONTACTS [SHOW CONTACTS] 50%
-' _ SHOW A SPECIFFIC CONTACT
+' - SHOW A SPECIFFIC CONTACT
+' - SHOW LIST OF EMAILS --> NAME: EMAILS
+' - SHOW LIST OF PHONE NUMBERS --> NAME: NUMBER
+' - SHOW LIST OF ADDRESSES --> NAME: ADDRESS
 
 'V 0.1
 
@@ -900,6 +905,10 @@ DO UNTIL counter = 101
 
 	IF Show = "CBU" THEN
 	PRINT "# "; AgendaCBU(counter); ""
+	END IF
+
+	IF Show = "ADDRESS" THEN
+	PRINT "# "; AgendaAddress(counter); ""
 	END IF
 
 	IF Show = "EMAIL" THEN
