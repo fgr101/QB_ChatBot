@@ -1,3 +1,4 @@
+DECLARE SUB ShowSpeciffic ()
 DECLARE SUB ShowContactsInfo ()
 DECLARE SUB ShowContactsNames ()
 DECLARE SUB Show1Contact ()
@@ -186,19 +187,42 @@ RepeatAgain:
 
 		SELECT CASE UCASE$(UserInput)
 
+		       ' CONTACTS ====================================
 
-			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"   ' CONTACTS ====================================
+		       'SHOW SPECCIFIC CONTACT INFORMATION
+			CASE "SHOW NUMBER", "SHOW PHONE", "SHOW PHONE NUMBER"
+
+			      Show = "NUMBER"
+			      CALL ShowSpeciffic
+
+			CASE "SHOW EMAIL", "SHOW EMAIL ADDRESS"
+
+			      Show = "EMAIL"
+			      CALL ShowSpeciffic
+
+			CASE "SHOW CBU", "SHOW BANK NUMBER", "SHOW BANKING CODE"
+
+				Show = "CBU"
+				CALL ShowSpeciffic
+
+			CASE "SHOW ADDRESS", "SHOW STREET ADDRESS"
+
+				Show = "ADDRESS"
+				CALL ShowSpeciffic
+
+		       'SHOW ALL NAMES AND ALL INFORMATION
+			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"
 
 				Show = "NAMES"
 				ShowContactsInfo
 
-			CASE "SHOW PHONES", "SHOW PHONE NUMBERS", "SHOW ALL PHONE NUMBERS", "SHOW CONTACTS PHONE"
+			CASE "SHOW PHONES", "SHOW PHONE NUMBERS", "SHOW ALL PHONE NUMBERS", "SHOW CONTACTS PHONE", "SHOW PHONES", "SHOW NUMBERS"
 
 				Show = "PHONES"
 				ShowContactsInfo
 
 
-			CASE "SHOW BANK NUMBERS", "SHOW ALL BANK NUMBERS", "SHOW CONTACTS BANK", "SHOW CONTACTS CBU", "SHOW ALL CBUS", "SHOW CBUS"
+			CASE "SHOW BANKING CODES", "SHOW BANK NUMBERS", "SHOW ALL BANK NUMBERS", "SHOW CONTACTS BANK", "SHOW CONTACTS CBU", "SHOW ALL CBUS", "SHOW CBUS", "SHOW BANKING CODES"
 
 				Show = "CBU"
 				ShowContactsInfo
@@ -214,14 +238,17 @@ RepeatAgain:
 				Show = "EMAIL"
 				ShowContactsInfo
 
+		       'ADDING CONTACTS TO THE AGENDA
 			CASE "ADD CONTACT"
 
 				AddContact
 
+		       'SHOW ONLY ONE CONTACT INFORMATION
 			CASE "SHOW CONTACT", "SHOW A CONTACT"
 
 				Show1Contact
 
+		       'SHOW ALL CONTACTS INFORMATION
 			CASE "SHOW ALL CONTACTS", "SHOW CONTACTS"
 			      
 				PRINT "Showing list of contacts: "
@@ -584,6 +611,7 @@ PRINT "AGAIN / REPEAT - Repeat the last command."
 PRINT "ADD CONTACT"
 PRINT "SHOW CONTACT"
 PRINT "SHOW ALL CONTACTS"
+PRINT "SHOW EMAIL/ SHOW NUMBER / SHOW CBU / SHOW ADDRESS"
 PRINT "BYE - End the conversation and close the program."
 PRINT
 
@@ -595,14 +623,10 @@ PRINT "To use any of the commands, simply type the command in the chatbot progra
 PRINT "and hit ENTER. The program will respond with the appropriate information"
 PRINT "or action."
 
-WaitKey
-
 PRINT
 PRINT "Note: Make sure to spell the commands correctly and use proper punctuation."
 PRINT "The chatbot program may not understand incorrectly spelled words or commands."
 PRINT
-
-WaitKey
 
 PRINT "- That is all. "
 
@@ -958,6 +982,51 @@ counter = counter + 1
 LOOP
 
 PRINT
+
+END SUB
+
+SUB ShowSpeciffic
+
+' SHOW SPECIFFIC CONTACT INFORMATION
+
+PRINT "What contact?"
+LINE INPUT "* "; SearchName
+
+counter = 0
+
+DO UNTIL counter = 101
+
+	IF Show = "NUMBER" AND AgendaName(counter) = SearchName THEN
+
+		PRINT "# Phone Number: "; AgendaPhoneNumber(counter); ""
+		counter = 100
+
+	END IF
+
+	IF Show = "CBU" AND AgendaName(counter) = SearchName THEN
+
+		PRINT "# Banking Code: "; AgendaCBU(counter); ""
+		counter = 100
+
+	END IF
+
+	IF Show = "EMAIL" AND AgendaName(counter) = SearchName THEN
+
+		PRINT "# Email Address: "; AgendaEmail(counter); ""
+		counter = 100
+
+	END IF
+
+	IF Show = "ADDRESS" AND AgendaName(counter) = SearchName THEN
+
+		PRINT "# Street Address: "; AgendaAddress(counter); ""
+		counter = 100
+
+	END IF
+
+	counter = counter + 1
+
+LOOP
 
 END SUB
 
