@@ -21,6 +21,10 @@ DECLARE SUB Load ()
 DECLARE SUB RemindMe ()
 DECLARE SUB RandomIni ()
 DECLARE SUB DescribeYourself ()
+
+DECLARE SUB TagNoteSub ()
+DECLARE SUB GoUpperCase ()
+
 DIM SHARED UserInput AS STRING
 
 'Variables for RANDOMIZARION (most of them ARRAYS)
@@ -34,8 +38,8 @@ DIM SHARED eyes(10) AS STRING
 DIM SHARED hair(10) AS STRING
 DIM SHARED HairColor(10) AS STRING
 
-DIM newString AS STRING
-DIM i AS INTEGER
+DIM SHARED newString AS STRING
+DIM SHARED i AS INTEGER
 
 DIM SHARED counter AS INTEGER
 DIM SHARED TaskNumber AS INTEGER
@@ -59,6 +63,10 @@ DIM SHARED SearchName AS STRING
 DIM SHARED NameFound AS SINGLE
 DIM SHARED Show AS STRING
 
+DIM SHARED TagNumber AS INTEGER
+DIM SHARED TagName(500) AS STRING
+DIM SHARED TagNote(500) AS STRING
+DIM SHARED TagID(500) AS INTEGER
 
 AgendaID = 0
 
@@ -159,26 +167,29 @@ DO     'LOOP starts.
 '=============================================================================
 
 	'Changes UserInput to UPPER CASE
-	UserInput = UCASE$(UserInput)
+	
+	GoUpperCase
+	
+	'UserInput = UCASE$(UserInput)
 	
 	'The next piece of code was suggested by the AI. It aims to
 	'eliminate any special characters like !?,.' etc. from the users
 	'answer and then store it in the variable UserInput.
 
-	newString = ""
+	'newString = ""
 
-	FOR i = 1 TO LEN(UserInput)
+	'FOR i = 1 TO LEN(UserInput)
 		
-		IF MID$(UserInput, i, 1) <> "," AND MID$(UserInput, i, 1) <> ":" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "?" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "'" AND MID$(UserInput, i, 1) <> "!"  _
-THEN
+	'       IF MID$(UserInput, i, 1) <> "," AND MID$(UserInput, i, 1) <> ":" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "?" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "'" AND MID$(UserInput, i, 1) <> "!"  _
+'THEN
 			
-			newString = newString + MID$(UserInput, i, 1)
+	'               newString = newString + MID$(UserInput, i, 1)
 		
-		END IF
+	'       END IF
 	
-	NEXT i
+	'NEXT i
 	
-	UserInput = newString
+	'UserInput = newString
 	'PRINT UserInput
 	
 RepeatAgain:
@@ -193,22 +204,22 @@ RepeatAgain:
 			CASE "SHOW NUMBER", "SHOW PHONE", "SHOW PHONE NUMBER"
 
 			      Show = "NUMBER"
-			      CALL ShowSpeciffic
+			       ShowSpeciffic
 
 			CASE "SHOW EMAIL", "SHOW EMAIL ADDRESS"
 
 			      Show = "EMAIL"
-			      CALL ShowSpeciffic
+			       ShowSpeciffic
 
 			CASE "SHOW CBU", "SHOW BANK NUMBER", "SHOW BANKING CODE"
 
 				Show = "CBU"
-				CALL ShowSpeciffic
+				 ShowSpeciffic
 
 			CASE "SHOW ADDRESS", "SHOW STREET ADDRESS"
 
 				Show = "ADDRESS"
-				CALL ShowSpeciffic
+				 ShowSpeciffic
 
 		       'SHOW ALL NAMES AND ALL INFORMATION
 			CASE "SHOW ALL NAMES", "SHOW CONTACTS NAMES"
@@ -441,6 +452,10 @@ RepeatAgain:
 
 			CASE ""
 			
+			CASE "#TAG"
+			
+				TagNoteSub
+			
 			CASE "IM BORED WHAT CAN I DO", "WHAT CAN I DO", "IM BORED", "WHAT TO DO WHEN IM BORED", "WHAT TO DO WHEN BORED", "SUGGEST SOMETHING TO DO", "WHAT TO DO"
 			
 				RNumber10
@@ -589,6 +604,37 @@ LOOP
 
 END SUB
 
+SUB GoUpperCase
+
+'=============================================================================
+
+	'Changes UserInput to UPPER CASE
+	UserInput = UCASE$(UserInput)
+	
+	'The next piece of code was suggested by the AI. It aims to
+	'eliminate any special characters like !?,.' etc. from the users
+	'answer and then store it in the variable UserInput.
+
+	newString = ""
+
+	FOR i = 1 TO LEN(UserInput)
+		
+		IF MID$(UserInput, i, 1) <> "," AND MID$(UserInput, i, 1) <> ":" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "?" AND MID$(UserInput, i, 1) <> "." AND MID$(UserInput, i, 1) <> "'" AND MID$(UserInput, i, 1) <> "!"  _
+THEN
+			
+			newString = newString + MID$(UserInput, i, 1)
+		
+		END IF
+	
+	NEXT i
+	
+	UserInput = newString
+	'PRINT UserInput
+	
+'=============================================================================
+
+END SUB
+
 SUB Help
 
 PRINT "Sure!"
@@ -612,6 +658,7 @@ PRINT "ADD CONTACT"
 PRINT "SHOW CONTACT"
 PRINT "SHOW ALL CONTACTS"
 PRINT "SHOW EMAIL/ SHOW NUMBER / SHOW CBU / SHOW ADDRESS"
+PRINT "#TAG - ADD A NOTE USING TAGGING FOR CATEGORIZATION."
 PRINT "BYE - End the conversation and close the program."
 PRINT
 
@@ -1052,6 +1099,59 @@ counter = counter + 1
 LOOP
 
 PRINT
+
+END SUB
+
+SUB TagNoteSub '!!!!!! CONTINUE WORKING HERE!!!!!!
+
+PRINT "SHOW tag notes or ADD a speciffic tag note?"
+LINE INPUT "*", UserInput
+
+GoUpperCase
+
+SELECT CASE UserInput
+	
+	CASE "ADD"
+
+		PRINT "Add the TAGNAME to choose the speciffic tag where the note will be written."
+		LINE INPUT "* #", UserInput
+		
+		GoUpperCase
+		
+		TagName(TagNumber) = UserInput
+
+		PRINT "What is the note to be associated to this tag?"
+		LINE INPUT "* "; UserInput
+
+		TagNote(TagNumber) = UserInput
+
+		'TagID(TagNumber) = TagID(TagNumber) + 1
+		
+		TagNumber = TagNumber + 1
+
+	
+	CASE "SHOW"
+	
+	PRINT "Add the TAGNAME to choose the speciffic tags to be searched."
+	LINE INPUT "* #", UserInput
+	
+	GoUpperCase
+	
+	counter = 0
+	
+	DO UNTIL counter = 500
+	
+		IF TagName(counter) = UserInput THEN
+		
+			PRINT TagNote(counter)
+		
+		END IF
+		
+		counter = counter + 1
+
+	LOOP
+
+END SELECT
 
 END SUB
 
