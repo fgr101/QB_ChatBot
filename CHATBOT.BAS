@@ -452,7 +452,7 @@ RepeatAgain:
 
 			CASE ""
 			
-			CASE "#TAG"
+			CASE "#TAG", "TAG", "TAG NOTE", "NOTE"
 			
 				TagNoteSub
 			
@@ -1104,13 +1104,35 @@ END SUB
 
 SUB TagNoteSub '!!!!!! CONTINUE WORKING HERE!!!!!!
 
-PRINT "SHOW tag notes or ADD a speciffic tag note?"
+PRINT "LIST tags, SHOW tagged notes or ADD a speciffic tagged note?"
 LINE INPUT "*", UserInput
 
 GoUpperCase
 
 SELECT CASE UserInput
 	
+	CASE "LIST"
+
+	PRINT
+	PRINT "-----------------------------------"
+
+	counter = 0
+
+	DO UNTIL counter = 500
+
+		IF NOT TagName(counter) = "" THEN
+
+			PRINT "#"; TagName(counter)
+
+		END IF
+
+	counter = counter + 1
+
+	LOOP
+
+	PRINT "-----------------------------------"
+	PRINT
+
 	CASE "ADD"
 
 		PRINT "Add the TAGNAME to choose the speciffic tag where the note will be written."
@@ -1137,6 +1159,9 @@ SELECT CASE UserInput
 	
 	GoUpperCase
 	
+	PRINT
+	PRINT "-----------------------------------"
+	
 	counter = 0
 	
 	DO UNTIL counter = 500
@@ -1150,6 +1175,9 @@ SELECT CASE UserInput
 		counter = counter + 1
 
 	LOOP
+
+	PRINT "-----------------------------------"
+	PRINT
 
 END SELECT
 
