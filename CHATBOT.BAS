@@ -1,3 +1,5 @@
+DECLARE SUB AddTagNote ()
+DECLARE SUB ListTags ()
 DECLARE SUB ShowSpeciffic ()
 DECLARE SUB ShowContactsInfo ()
 DECLARE SUB ShowContactsNames ()
@@ -68,6 +70,10 @@ DIM SHARED TagName(500) AS STRING
 DIM SHARED TagNote(500) AS STRING
 DIM SHARED TagID(500) AS INTEGER
 
+' BOOLEANS
+
+DIM SHARED duplicateFound AS INTEGER
+
 AgendaID = 0
 
 'FILE SYSTEM
@@ -80,7 +86,7 @@ CLOSE #1
 OPEN "brain.dat" FOR OUTPUT AS #1
 
 counter = 0
-DO UNTIL counter = 10000
+DO UNTIL counter = 20000
 
 	WRITE #1, ""
 	counter = counter + 1
@@ -452,10 +458,18 @@ RepeatAgain:
 
 			CASE ""
 			
-			CASE "#TAG", "TAG", "TAG NOTE", "NOTE"
+			CASE "#TAG", "TAG", "TAG NOTE", "NOTE", "NOTES"
 			
 				TagNoteSub
 			
+			CASE "#TAG LIST", "LIST OF TAGS", "TAGS LIST", "SHOW TAGS", "TAGS", "SHOW NOTES TAGS"
+
+			ListTags
+
+			CASE "#TAG ADD", "ADD TAGGED NOTE", "ADD NOTE"
+
+				AddTagNote
+
 			CASE "IM BORED WHAT CAN I DO", "WHAT CAN I DO", "IM BORED", "WHAT TO DO WHEN IM BORED", "WHAT TO DO WHEN BORED", "SUGGEST SOMETHING TO DO", "WHAT TO DO"
 			
 				RNumber10
@@ -569,6 +583,44 @@ AgendaID = AgendaID + 1
 
 END SUB
 
+SUB AddTagNote 'ADD TAGGED NOTES
+
+PRINT "Add the TAGNAME to choose the speciffic tag where the note will be written."
+
+AddInit:
+LINE INPUT "* #", UserInput
+
+GoUpperCase
+
+FOR i = 0 TO 500  'CHECKS IF THERE IS A DUPLICATE TAG.
+
+	IF TagName(i) = UserInput THEN
+
+		PRINT "- Duplicate Found! You have already added a tag with the same name."
+		PRINT "  Check below and try again using a different name for the tag."
+		PRINT
+
+		ListTags
+
+		PRINT "Add a different #TAG for your note please..."
+
+		GOTO AddInit
+
+	END IF
+
+NEXT i
+
+TagName(TagNumber) = UserInput
+
+PRINT "- What is the note to be associated to this tag?"
+LINE INPUT "* "; UserInput
+
+TagNote(TagNumber) = UserInput
+
+TagNumber = TagNumber + 1
+
+END SUB
+
 SUB DescribeYourself
 
 	PRINT "I'm "; height(10); ". ";
@@ -659,6 +711,8 @@ PRINT "SHOW CONTACT"
 PRINT "SHOW ALL CONTACTS"
 PRINT "SHOW EMAIL/ SHOW NUMBER / SHOW CBU / SHOW ADDRESS"
 PRINT "#TAG - ADD A NOTE USING TAGGING FOR CATEGORIZATION."
+PRINT "#TAG LIST - SHOW AVAILABLE TAGS."
+
 PRINT "BYE - End the conversation and close the program."
 PRINT
 
@@ -676,6 +730,27 @@ PRINT "The chatbot program may not understand incorrectly spelled words or comma
 PRINT
 
 PRINT "- That is all. "
+
+END SUB
+
+SUB ListTags
+
+PRINT "Showing the list of available tags..."
+PRINT
+PRINT "-----------------------------------"
+
+FOR i = 0 TO 500
+
+	IF NOT TagName(i) = "" THEN
+
+		PRINT "#"; TagName(i)
+
+	END IF
+
+NEXT i
+
+PRINT "-----------------------------------"
+PRINT
 
 END SUB
 
@@ -721,6 +796,19 @@ DO UNTIL counter = 100
 
 LOOP
 
+counter = 0  '================ LOADING #TAGS
+
+INPUT #1, TagNumber
+
+DO UNTIL counter = 500
+
+	INPUT #1, TagName(counter)
+	INPUT #1, TagNote(counter)
+
+	counter = counter + 1
+
+LOOP
+
 CLOSE #1
 
 PRINT
@@ -731,6 +819,17 @@ END SUB
 SUB Notes
 
 ' TO DO
+
+' Que se cuando el tag sea encontrado, la nueva nota se fije
+' al TAG ya existente.
+' Poder borrar un TAG especifico.
+' Poder borrar todos los tags.
+'- you can get to SHOW NOTES using several commands.
+'- TAGGED NOTES: Add VALIDATION for tagged notes.
+'  Check if the tag already exists before adding it.
+'  Duplicate Entries: When adding tags or notes, as in your case,
+'  check if the entry already exists to avoid duplicates.
+
 
 ' - SHOW A SPECIFFIC CONTACT CBU
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
@@ -886,6 +985,20 @@ DO UNTIL counter = 100
 	counter = counter + 1
 
 LOOP
+
+counter = 0 ' ======================== SAVING #TAGS
+
+WRITE #1, TagNumber
+
+DO UNTIL counter = 500
+
+	WRITE #1, TagName(counter)
+	WRITE #1, TagNote(counter)
+	counter = counter + 1
+
+LOOP
+
+
 
 CLOSE #1
 
@@ -1111,73 +1224,42 @@ GoUpperCase
 
 SELECT CASE UserInput
 	
-	CASE "LIST"
+	CASE "LIST", "LIST TAGS"
 
-	PRINT
-	PRINT "-----------------------------------"
+		ListTags
 
-	counter = 0
+	CASE "ADD", "ADD NOTE"
 
-	DO UNTIL counter = 500
+		AddTagNote
+	
+	CASE "SHOW", "SHOW NOTES", "SHOW NOTE"
+	
+		ListTags
 
-		IF NOT TagName(counter) = "" THEN
-
-			PRINT "#"; TagName(counter)
-
-		END IF
-
-	counter = counter + 1
-
-	LOOP
-
-	PRINT "-----------------------------------"
-	PRINT
-
-	CASE "ADD"
-
-		PRINT "Add the TAGNAME to choose the speciffic tag where the note will be written."
+		PRINT "- Which speciffic TAG do you want to check?"
 		LINE INPUT "* #", UserInput
-		
+	
 		GoUpperCase
+	
+		PRINT
+		PRINT "-----------------------------------"
+	
+		counter = 0
+	
+		DO UNTIL counter = 500
+	
+			IF TagName(counter) = UserInput THEN
 		
-		TagName(TagNumber) = UserInput
-
-		PRINT "What is the note to be associated to this tag?"
-		LINE INPUT "* "; UserInput
-
-		TagNote(TagNumber) = UserInput
-
-		'TagID(TagNumber) = TagID(TagNumber) + 1
+				PRINT TagNote(counter)
 		
-		TagNumber = TagNumber + 1
-
-	
-	CASE "SHOW"
-	
-	PRINT "Add the TAGNAME to choose the speciffic tags to be searched."
-	LINE INPUT "* #", UserInput
-	
-	GoUpperCase
-	
-	PRINT
-	PRINT "-----------------------------------"
-	
-	counter = 0
-	
-	DO UNTIL counter = 500
-	
-		IF TagName(counter) = UserInput THEN
+			END IF
 		
-			PRINT TagNote(counter)
-		
-		END IF
-		
-		counter = counter + 1
+			counter = counter + 1
 
-	LOOP
+		LOOP
 
-	PRINT "-----------------------------------"
-	PRINT
+		PRINT "-----------------------------------"
+		PRINT
 
 END SELECT
 
