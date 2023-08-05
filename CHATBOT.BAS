@@ -66,13 +66,14 @@ DIM SHARED NameFound AS SINGLE
 DIM SHARED Show AS STRING
 
 DIM SHARED TagNumber AS INTEGER
-DIM SHARED TagName(500) AS STRING
-DIM SHARED TagNote(500) AS STRING
-DIM SHARED TagID(500) AS INTEGER
+DIM SHARED TagName(100) AS STRING
+DIM SHARED TagNote(100, 50) AS STRING
+DIM SHARED NoteCount(50) AS INTEGER
+DIM SHARED TagID(100) AS INTEGER
 
 ' BOOLEANS
 
-DIM SHARED duplicateFound AS INTEGER
+DIM SHARED DuplicateFound AS INTEGER
 
 AgendaID = 0
 
@@ -80,13 +81,16 @@ AgendaID = 0
 'Checking FILES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 'If FILES don't exist the program creates them. ++++++++++++++=++++++++++++++
 
+PRINT "Creating file brain.dat..."
+
+
 OPEN "brain.dat" FOR BINARY AS #1
 IF LOF(1) = 0 THEN
 CLOSE #1
 OPEN "brain.dat" FOR OUTPUT AS #1
 
 counter = 0
-DO UNTIL counter = 20000
+DO UNTIL counter = 10000
 
 	WRITE #1, ""
 	counter = counter + 1
@@ -592,32 +596,36 @@ LINE INPUT "* #", UserInput
 
 GoUpperCase
 
-FOR i = 0 TO 500  'CHECKS IF THERE IS A DUPLICATE TAG.
+PRINT "- What is the note to be associated to this tag?"
+		
+FOR i = 0 TO 100  'CHECKS IF THERE IS A DUPLICATE TAG.
 
 	IF TagName(i) = UserInput THEN
 
-		PRINT "- Duplicate Found! You have already added a tag with the same name."
-		PRINT "  Check below and try again using a different name for the tag."
-		PRINT
-
-		ListTags
-
-		PRINT "Add a different #TAG for your note please..."
-
-		GOTO AddInit
-
+		'Duplicate Found!
+		DuplicateFound = 1
+		
 	END IF
 
 NEXT i
 
-TagName(TagNumber) = UserInput
+IF DuplicateFound = 1 THEN
+	
+	LINE INPUT "* "; UserInput
 
-PRINT "- What is the note to be associated to this tag?"
-LINE INPUT "* "; UserInput
+	NoteCount(TagNumber) = NoteCount(TagNumber) + 1
+	TagNote(TagNumber, NoteCount(TagNumber)) = UserInput
+	DuplicateFound = 0
 
-TagNote(TagNumber) = UserInput
+ELSE
 
-TagNumber = TagNumber + 1
+	TagName(TagNumber) = UserInput
+	LINE INPUT "* "; UserInput
+
+	TagNote(TagNumber, NoteCount(TagNumber)) = UserInput
+	TagNumber = TagNumber + 1
+
+END IF
 
 END SUB
 
@@ -739,7 +747,7 @@ PRINT "Showing the list of available tags..."
 PRINT
 PRINT "-----------------------------------"
 
-FOR i = 0 TO 500
+FOR i = 0 TO 100
 
 	IF NOT TagName(i) = "" THEN
 
@@ -800,10 +808,13 @@ counter = 0  '================ LOADING #TAGS
 
 INPUT #1, TagNumber
 
-DO UNTIL counter = 500
+DO UNTIL counter = 100
 
 	INPUT #1, TagName(counter)
-	INPUT #1, TagNote(counter)
+
+	FOR i = 1 TO 50
+	INPUT #1, TagNote(counter, i)
+	NEXT i
 
 	counter = counter + 1
 
@@ -990,10 +1001,16 @@ counter = 0 ' ======================== SAVING #TAGS
 
 WRITE #1, TagNumber
 
-DO UNTIL counter = 500
+DO UNTIL counter = 100
 
 	WRITE #1, TagName(counter)
-	WRITE #1, TagNote(counter)
+
+	FOR i = 1 TO 50
+
+		WRITE #1, TagNote(counter, i)
+
+	NEXT i
+
 	counter = counter + 1
 
 LOOP
@@ -1246,12 +1263,21 @@ SELECT CASE UserInput
 	
 		counter = 0
 	
-		DO UNTIL counter = 500
+		DO UNTIL counter = 100
 	
 			IF TagName(counter) = UserInput THEN
 		
-				PRINT TagNote(counter)
-		
+				FOR i = 0 TO 50
+
+					PRINT TagNote(counter, i)
+
+					IF TagNote(counter, i) = "" THEN
+
+						EXIT FOR
+
+					END IF
+
+				NEXT i
 			END IF
 		
 			counter = counter + 1
