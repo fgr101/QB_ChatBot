@@ -1,3 +1,4 @@
+DECLARE SUB EraseAllTags ()
 DECLARE SUB AddTagNote ()
 DECLARE SUB ListTags ()
 DECLARE SUB ShowSpeciffic ()
@@ -75,64 +76,34 @@ DIM SHARED TagID(100) AS INTEGER
 
 DIM SHARED DuplicateFound AS INTEGER
 
+
+CLS
 AgendaID = 0
 
 'FILE SYSTEM
 'Checking FILES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 'If FILES don't exist the program creates them. ++++++++++++++=++++++++++++++
 
-PRINT "Creating file brain.dat..."
-
-
 OPEN "brain.dat" FOR BINARY AS #1
 IF LOF(1) = 0 THEN
-CLOSE #1
-OPEN "brain.dat" FOR OUTPUT AS #1
 
-counter = 0
-DO UNTIL counter = 10000
+	PRINT "Creating file brain.dat..."
 
-	WRITE #1, ""
-	counter = counter + 1
+	CLOSE #1
+	OPEN "brain.dat" FOR OUTPUT AS #1
 
-LOOP
+	counter = 0
+	DO UNTIL counter = 10000
 
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
-'WRITE #1, ""
+		WRITE #1, ""
+		counter = counter + 1
 
-PRINT "brain.dat File created."
+	LOOP
+
+	PRINT "brain.dat File created."
+
 END IF
+
 CLOSE #1
 
 TaskNumber = 0
@@ -474,6 +445,10 @@ RepeatAgain:
 
 				AddTagNote
 
+			CASE "#TAG DEL ALL", "ERASE TAGS", "DELETE TAGS", "ERASE ALL TAGS", "DELETE ALL TAGS", "ERASE ALL NOTHES", "DELETE ALL NOTES", "DELETE NOTES", "ERASE NOTES"
+
+				EraseAllTags
+
 			CASE "IM BORED WHAT CAN I DO", "WHAT CAN I DO", "IM BORED", "WHAT TO DO WHEN IM BORED", "WHAT TO DO WHEN BORED", "SUGGEST SOMETHING TO DO", "WHAT TO DO"
 			
 				RNumber10
@@ -638,6 +613,37 @@ SUB DescribeYourself
 
 END SUB
 
+SUB EraseAllTags
+
+PRINT "Write YES if you want to delete all #TAGS AND NOTES."
+LINE INPUT "* ", UserInput
+
+GoUpperCase
+
+IF UserInput = "YES" THEN
+
+	FOR i = 0 TO 100
+
+		TagName(i) = ""
+
+		FOR i2 = 0 TO 50
+
+			TagNote(i, i2) = ""
+
+		NEXT i2
+
+	NEXT i
+
+	PRINT "- All #TAGS and NOTES have been deleted!"
+ELSE
+
+PRINT "- #TAGS and NOTES HAVE NOT been deleted!"
+
+END IF
+
+
+END SUB
+
 SUB ForgetReminders
 
 counter = 0
@@ -706,20 +712,30 @@ PRINT "WHAT DATE IS IT? - Ask for the current date."
 PRINT "REMIND ME - Ask to set a reminder."
 PRINT "TASK - Ask to add a task to your to-do list."
 PRINT "ROLL A D6 - Roll a six-sided die and provide the result."
+
+WaitKey
+
 PRINT "FORGET REMINDER - Ask to delete a previously set reminder."
 PRINT "FORGET TASK - Ask to delete a previously added task."
 PRINT "FORGET EVERYTHING / FORGET ALL - Ask to delete all tasks and reminders."
 PRINT "WHAT DO YOU HAVE FOR ME? - Show all tasks and reminders."
 PRINT "I'M BORED / WHAT CAN I DO? - Suggest a random activity to do."
+
+WaitKey
+
 PRINT "ABOUT - Show software version and other relevant information."
 PRINT "CLEAR SCREEN / CLS - Clear the screen."
 PRINT "AGAIN / REPEAT - Repeat the last command."
 PRINT "ADD CONTACT"
 PRINT "SHOW CONTACT"
+
+WaitKey
+
 PRINT "SHOW ALL CONTACTS"
 PRINT "SHOW EMAIL/ SHOW NUMBER / SHOW CBU / SHOW ADDRESS"
 PRINT "#TAG - ADD A NOTE USING TAGGING FOR CATEGORIZATION."
 PRINT "#TAG LIST - SHOW AVAILABLE TAGS."
+PRINT "#TAG DEL ALL - DELETE ALL TAGS AND NOTES."
 
 PRINT "BYE - End the conversation and close the program."
 PRINT
@@ -831,13 +847,8 @@ SUB Notes
 
 ' TO DO
 
-' Que se cuando el tag sea encontrado, la nueva nota se fije
-' al TAG ya existente.
 ' Poder borrar un TAG especifico.
-' Poder borrar todos los tags.
-'- you can get to SHOW NOTES using several commands.
 '- TAGGED NOTES: Add VALIDATION for tagged notes.
-'  Check if the tag already exists before adding it.
 '  Duplicate Entries: When adding tags or notes, as in your case,
 '  check if the entry already exists to avoid duplicates.
 
@@ -855,6 +866,13 @@ SUB Notes
 ' DONE
 
 'V 0.2
+
+'- Que se cuando el tag sea encontrado, la nueva nota se fije
+'  al TAG ya existente.
+'- Poder borrar todos los tags.
+'- Get to SHOW NOTES using several commands.
+'- Check if the tag already exists before adding it.
+
 
 ' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.
 '   Solved in the whole program. LINE INPUT insted of INPUT.
