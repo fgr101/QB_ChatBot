@@ -1,3 +1,4 @@
+DECLARE SUB TEST ()
 DECLARE SUB EraseAllTags ()
 DECLARE SUB AddTagNote ()
 DECLARE SUB ListTags ()
@@ -67,7 +68,7 @@ DIM SHARED NameFound AS SINGLE
 DIM SHARED Show AS STRING
 
 DIM SHARED TagNumber AS INTEGER
-DIM SHARED TagName(100) AS STRING
+DIM SHARED Tagname(100) AS STRING
 DIM SHARED TagNote(100, 50) AS STRING
 DIM SHARED NoteCount(50) AS INTEGER
 DIM SHARED TagID(100) AS INTEGER
@@ -497,6 +498,10 @@ RepeatAgain:
 
 				CLS
 
+			CASE "TEST"
+
+				TEST
+
 			CASE "ABOUT"
 
 				PRINT
@@ -575,9 +580,9 @@ PRINT "- What is the note to be associated to this tag?"
 		
 FOR i = 0 TO 100  'CHECKS IF THERE IS A DUPLICATE TAG.
 
-	IF TagName(i) = UserInput THEN
+	IF Tagname(i) = UserInput THEN
 
-		'Duplicate Found!
+		PRINT "DUPLICATE FOUND" 'Duplicate Found!
 		DuplicateFound = 1
 		
 	END IF
@@ -588,18 +593,27 @@ IF DuplicateFound = 1 THEN
 	
 	LINE INPUT "* "; UserInput
 
-	NoteCount(TagNumber) = NoteCount(TagNumber) + 1
-	TagNote(TagNumber, NoteCount(TagNumber)) = UserInput
+	NoteCount = 0
+
+	DO UNTIL TagNote(TagNumber, NoteCount) = ""
+		NoteCount = NoteCount + 1
+	LOOP
+
+	TagNote(TagNumber, NoteCount) = UserInput
 	DuplicateFound = 0
 
 ELSE
 
-	TagName(TagNumber) = UserInput
+	TagNumber = 0
+	DO UNTIL Tagname(TagNumber) = ""
+		TagNumber = TagNumber + 1
+	LOOP
+
+	Tagname(TagNumber) = UserInput
 	LINE INPUT "* "; UserInput
 
 	TagNote(TagNumber, NoteCount(TagNumber)) = UserInput
-	TagNumber = TagNumber + 1
-
+	
 END IF
 
 END SUB
@@ -624,7 +638,7 @@ IF UserInput = "YES" THEN
 
 	FOR i = 0 TO 100
 
-		TagName(i) = ""
+		Tagname(i) = ""
 
 		FOR i2 = 0 TO 50
 
@@ -765,9 +779,9 @@ PRINT "-----------------------------------"
 
 FOR i = 0 TO 100
 
-	IF NOT TagName(i) = "" THEN
+	IF NOT Tagname(i) = "" THEN
 
-		PRINT "#"; TagName(i)
+		PRINT "#"; Tagname(i)
 
 	END IF
 
@@ -826,9 +840,9 @@ INPUT #1, TagNumber
 
 DO UNTIL counter = 100
 
-	INPUT #1, TagName(counter)
+	INPUT #1, Tagname(counter)
 
-	FOR i = 1 TO 50
+	FOR i = 0 TO 50
 	INPUT #1, TagNote(counter, i)
 	NEXT i
 
@@ -852,13 +866,13 @@ SUB Notes
 '  Duplicate Entries: When adding tags or notes, as in your case,
 '  check if the entry already exists to avoid duplicates.
 
-
 ' - SHOW A SPECIFFIC CONTACT CBU
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
 ' - SHOW A SPECIFFIC CONTACT EMAIL
 ' - SHOW A SPECIFFIC CONTACT ADDRESS
 ' - DELETE A SPECIFIC CONTACT
 ' - MODIFY A SPECIFFIC CONTACT
+
 ' - The ChatBot is able to remember up to 10 different reminders.
 ' - The ChatBot is able to forget these 10 reminders.
 ' - The ChatBot tells you when there aren't any reminders for you.
@@ -867,7 +881,7 @@ SUB Notes
 
 'V 0.2
 
-'- Que se cuando el tag sea encontrado, la nueva nota se fije
+'- Que cuando el tag sea encontrado, la nueva nota se fije
 '  al TAG ya existente.
 '- Poder borrar todos los tags.
 '- Get to SHOW NOTES using several commands.
@@ -1021,9 +1035,9 @@ WRITE #1, TagNumber
 
 DO UNTIL counter = 100
 
-	WRITE #1, TagName(counter)
+	WRITE #1, Tagname(counter)
 
-	FOR i = 1 TO 50
+	FOR i = 0 TO 50
 
 		WRITE #1, TagNote(counter, i)
 
@@ -1253,7 +1267,7 @@ END SUB
 SUB TagNoteSub '!!!!!! CONTINUE WORKING HERE!!!!!!
 
 PRINT "LIST tags, SHOW tagged notes or ADD a speciffic tagged note?"
-LINE INPUT "*", UserInput
+LINE INPUT "* ", UserInput
 
 GoUpperCase
 
@@ -1283,14 +1297,14 @@ SELECT CASE UserInput
 	
 		DO UNTIL counter = 100
 	
-			IF TagName(counter) = UserInput THEN
+			IF Tagname(counter) = UserInput THEN
 		
 				FOR i = 0 TO 50
 
-					PRINT TagNote(counter, i)
-
+					PRINT TagNote(counter, i); counter; i
+									     
 					IF TagNote(counter, i) = "" THEN
-
+					
 						EXIT FOR
 
 					END IF
@@ -1306,6 +1320,32 @@ SELECT CASE UserInput
 		PRINT
 
 END SELECT
+
+END SUB
+
+SUB TEST
+
+PRINT TagNote(0, 1)
+PRINT TagNote(0, 2)
+PRINT TagNote(0, 3)
+PRINT TagNote(0, 4)
+PRINT TagNote(0, 5)
+
+WaitKey
+
+PRINT TagNote(1, 0)
+PRINT TagNote(1, 1)
+PRINT TagNote(1, 2)
+PRINT TagNote(1, 3)
+PRINT TagNote(1, 4)
+
+WaitKey
+
+PRINT TagNote(2, 0)
+PRINT TagNote(2, 1)
+PRINT TagNote(2, 2)
+PRINT TagNote(2, 3)
+PRINT TagNote(2, 4)
 
 END SUB
 
