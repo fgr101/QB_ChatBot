@@ -1,3 +1,4 @@
+DECLARE SUB DelTAG ()
 DECLARE SUB TEST ()
 DECLARE SUB EraseAllTags ()
 DECLARE SUB AddTagNote ()
@@ -72,6 +73,7 @@ DIM SHARED Tagname(100) AS STRING
 DIM SHARED TagNote(100, 50) AS STRING
 DIM SHARED NoteCount(50) AS INTEGER
 DIM SHARED TagID(100) AS INTEGER
+DIM SHARED Confirmation AS STRING
 
 ' BOOLEANS
 
@@ -434,19 +436,19 @@ RepeatAgain:
 
 			CASE ""
 			
-			CASE "#TAG", "TAG", "TAG NOTE", "NOTE", "NOTES"
+			CASE "#", "#TAG", "TAG", "TAG NOTE", "NOTE", "NOTES"
 			
 				TagNoteSub
 			
-			CASE "#TAG LIST", "LIST OF TAGS", "TAGS LIST", "SHOW TAGS", "TAGS", "SHOW NOTES TAGS"
+			CASE "#LIST", "#TAG LIST", "LIST OF TAGS", "TAGS LIST", "SHOW TAGS", "TAGS", "SHOW NOTES TAGS"
 
 			ListTags
 
-			CASE "#TAG ADD", "ADD TAGGED NOTE", "ADD NOTE"
+			CASE "#ADD", "#TAG ADD", "ADD TAGGED NOTE", "ADD NOTE"
 
 				AddTagNote
 
-			CASE "#TAG DEL ALL", "ERASE TAGS", "DELETE TAGS", "ERASE ALL TAGS", "DELETE ALL TAGS", "ERASE ALL NOTHES", "DELETE ALL NOTES", "DELETE NOTES", "ERASE NOTES"
+			CASE "#DEL", "#TAG DEL ALL", "ERASE TAGS", "DELETE TAGS", "ERASE ALL TAGS", "DELETE ALL TAGS", "ERASE ALL NOTHES", "DELETE ALL NOTES", "DELETE NOTES", "ERASE NOTES"
 
 				EraseAllTags
 
@@ -569,7 +571,9 @@ END SUB
 
 SUB AddTagNote 'ADD TAGGED NOTES
 
-PRINT "Add the TAGNAME to choose the speciffic tag where the note will be written."
+PRINT "Add a NEW TAG or choose a speciffic TAG from the list where the note will be written."
+
+ListTags
 
 AddInit:
 LINE INPUT "* #", UserInput
@@ -593,6 +597,11 @@ IF DuplicateFound = 1 THEN
 	
 	LINE INPUT "* "; UserInput
 
+	IF UserInput = "" THEN   'If the note is empty it skips adding it.
+		PRINT "- The note is empty. Nothing was added."
+		GOTO AddTagEND
+	END IF
+
 	NoteCount = 0
 
 	DO UNTIL TagNote(TagNumber, NoteCount) = ""
@@ -612,8 +621,60 @@ ELSE
 	Tagname(TagNumber) = UserInput
 	LINE INPUT "* "; UserInput
 
+	IF UserInput = "" THEN   'If the note is empty it skips adding it.
+		PRINT "- The note is empty. Nothing was added."
+		GOTO AddTagEND
+	END IF
+
 	TagNote(TagNumber, NoteCount(TagNumber)) = UserInput
 	
+END IF
+
+AddTagEND:
+END SUB
+
+SUB DelTAG
+
+ListTags
+
+PRINT "- What TAG would you like to DELETE?"
+LINE INPUT "* ", UserInput
+
+GoUpperCase
+
+PRINT "Write YES if you want to DELETE the #"; UserInput; " TAG."
+LINE INPUT "* ", Confirmation
+
+IF Confirmation = "YES" OR Confirmation = "yes" THEN
+
+	PRINT
+
+	FOR i = 0 TO 100  'CHECKS IF THERE IS A DUPLICATE TAG.
+
+		IF Tagname(i) = UserInput THEN
+
+			PRINT "TAG FOUND" 'Duplicate Found!
+			Tagname(i) = ""
+
+			TagNumber = i
+		
+			DO UNTIL TagNote(TagNumber, NoteCount) = ""
+
+				TagNote(TagNumber, NoteCount) = ""
+				PRINT "Note"; NoteCount; " DELETED..."
+				NoteCount = NoteCount + 1
+
+			LOOP
+
+
+		END IF
+
+	NEXT i
+
+ELSE
+
+	PRINT "- As you did not write YES, the speciffic #TAG HAS NOT been deleted!"
+
 END IF
 
 END SUB
@@ -861,10 +922,8 @@ SUB Notes
 
 ' TO DO
 
-' Poder borrar un TAG especifico.
-'- TAGGED NOTES: Add VALIDATION for tagged notes.
-'  Duplicate Entries: When adding tags or notes, as in your case,
-'  check if the entry already exists to avoid duplicates.
+' - Recordatorios de cumplea¤os como muestra FACEBOOK.
+' - Nuevos Comandos para borrar un tag especifico.
 
 ' - SHOW A SPECIFFIC CONTACT CBU
 ' - SHOW A SPECIFFIC CONTACT PHONE NUMBER
@@ -881,13 +940,15 @@ SUB Notes
 
 'V 0.2
 
+'- DELETE a speciffic TAG.
+'- TAGGED NOTES: Add VALIDATION for tagged notes.
+'  Duplicate Entries: When adding tags or notes, as in your case,
+'  check if the entry already exists to avoid duplicates.
 '- Que cuando el tag sea encontrado, la nueva nota se fije
 '  al TAG ya existente.
 '- Poder borrar todos los tags.
 '- Get to SHOW NOTES using several commands.
 '- Check if the tag already exists before adding it.
-
-
 ' - Bug: REDO FROM START when writing commas SOLVED! Thanks to AHMAD-511.
 '   Solved in the whole program. LINE INPUT insted of INPUT.
 ' - AGENDA: CONTACTS
@@ -1266,13 +1327,17 @@ END SUB
 
 SUB TagNoteSub '!!!!!! CONTINUE WORKING HERE!!!!!!
 
-PRINT "LIST tags, SHOW tagged notes or ADD a speciffic tagged note?"
+PRINT "LIST, SHOW, ADD or DEL a speciffic tagged note?"
 LINE INPUT "* ", UserInput
 
 GoUpperCase
 
 SELECT CASE UserInput
 	
+	CASE "DEL"
+
+		DelTAG
+
 	CASE "LIST", "LIST TAGS"
 
 		ListTags
@@ -1301,7 +1366,7 @@ SELECT CASE UserInput
 		
 				FOR i = 0 TO 50
 
-					PRINT TagNote(counter, i); counter; i
+					PRINT TagNote(counter, i)
 									     
 					IF TagNote(counter, i) = "" THEN
 					
