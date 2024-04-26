@@ -1,3 +1,4 @@
+DECLARE SUB EditReminder ()
 DECLARE SUB CalculateAge ()
 DECLARE SUB RMDelReminder ()
 DECLARE SUB RMRemindMe ()
@@ -179,6 +180,10 @@ CLS
 PRINT "- Hi! Welcome to QB ChatBot. Type HELP to see all the commands."
 
 IF NOT Reminder(ReminderNumber) = "" THEN
+
+	COLOR 7
+	PRINT
+	PRINT "Don't forget the next >>> "
 
 	RMShowReminders
 	BEEP
@@ -520,13 +525,17 @@ COLOR 7
 
 			'REMINDERS ===================================
 			
-			CASE "ADD REMINDER", "REMINDER", "REMIND ME OF SOMETHING", "REMIND ME", "REMEMBER", "REMEMBER SOMETHING", "NEW REMINDER"
+			CASE "SET REMINDER", "ADD REMINDER", "REMINDER", "REMIND ME OF SOMETHING", "REMIND ME", "REMEMBER", "REMEMBER SOMETHING", "NEW REMINDER"
 
 				RMRemindMe
 
-			CASE "SHOW REMINDERS", "SEE REMINDERS", "SHOW ME THE REMINDERS", "SHOW REMINDERS", "SHOW ME REMINDERS"
+			CASE "SHOW REMINDERS", "SHO REMINDERS", "SEE REMINDERS", "SHOW ME THE REMINDERS", "SHOW REMINDERS", "SHOW ME REMINDERS"
 
 				RMShowReminders
+
+			CASE "EDIT REMINDER", "EDIT REMINDERS"
+
+				EditReminder
 
 			CASE "REMINDERS"
 
@@ -555,7 +564,7 @@ COLOR 7
 				WriteTasks
 				
 
-			CASE "WHAT DO YOU HAVE FOR ME"
+			CASE "WHAT DO YOU HAVE FOR ME", "REPORT"
 			
 
 				IF Reminder(0) = "" AND Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
@@ -564,7 +573,11 @@ COLOR 7
 
 				ELSE
 
-				RMShowReminders
+					COLOR 7
+					PRINT
+					PRINT "Don't forget the next >>> "
+
+					RMShowReminders
 
 				END IF
 
@@ -1379,6 +1392,49 @@ SUB DescribeYourself
 
 END SUB
 
+SUB EditReminder
+
+	COLOR 7
+	PRINT "What reminder would you like to EDIT?"
+	PRINT " Input its slot number."
+
+	RMShowReminders
+
+	COLOR 7
+	INPUT "* "; SlotNumber
+
+
+	IF SlotNumber > ReminderStorage THEN
+
+		PRINT "- That number is too big. Try again."
+		GOTO EditReminderEnd
+
+	END IF
+
+	IF NOT Reminder(SlotNumer) = "" THEN
+
+		PRINT "|";
+		PRINT SlotNumber; "| "; Reminder(SlotNumber)
+
+		PRINT
+
+		COLOR 7
+		PRINT "Edit reminder: "
+		LINE INPUT "*"; Reminder(SlotNumber)
+		PRINT
+		PRINT "Ok, I will remind you the next: "; Reminder(SlotNumber)
+
+	ELSE
+
+		COLOR 7
+		PRINT "- The slot is empty, no reminder has been found... Try again."
+
+	END IF
+
+
+EditReminderEnd:
+END SUB
+
 SUB EraseAllTags
 
 PRINT "Write YES if you want to delete all #TAGS AND NOTES."
@@ -1616,6 +1672,8 @@ SUB Notes
 
 ' TO DO
 
+'- CONTINUE WORKING ON [EDIT REMINDERS FEATURE]
+
 '- TAGS --> Improve the addition of TAGS.
 '- TAGS --> Solve some bugs.
 
@@ -1632,7 +1690,6 @@ SUB Notes
 '- The ChatBot is able to forget these 10 reminders.
 '- The ChatBot tells you when there aren't any reminders for you.
 
-
 '=====================================================================
 
 ' DONE
@@ -1647,9 +1704,7 @@ SUB Notes
 '- REMINDERS: Use |REMINDERS| to show a list with the different keywords
 '  and commands available to deal with reminders.
 
-
 '- Show BIRTHDAYS in the right alphabetical order. SORT A-Z.
-
 
 'V 0.3
 
@@ -1865,10 +1920,7 @@ NEXT i
 counter = 0
 
 IF NoReminders = 1 THEN  'If there are reminders stored in memory...
-
-	COLOR 7
-	PRINT
-	PRINT "Don't forget the next >>> "
+	
 	PRINT
 
 	COLOR 9
