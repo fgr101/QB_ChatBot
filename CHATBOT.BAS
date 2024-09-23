@@ -68,7 +68,7 @@ DIM SHARED TaskNumber AS INTEGER
 
 'Variables for reminders, tasks and notes.
 
-DIM SHARED REMINDER(10) AS STRING
+DIM SHARED Reminder(10) AS STRING
 DIM SHARED ReminderNumber AS INTEGER
 DIM SHARED Task(10) AS STRING
 DIM SHARED again AS STRING
@@ -179,7 +179,7 @@ COLOR 7
 CLS
 PRINT "- Hi! Welcome to QB ChatBot. Type HELP to see all the commands."
 
-IF NOT REMINDER(ReminderNumber) = "" THEN
+IF NOT Reminder(ReminderNumber) = "" THEN
 
 	COLOR 7
 	PRINT
@@ -372,11 +372,12 @@ COLOR 7
 			CASE "ADD CONTACT"
 
 				AGAddContact
-
+				Save
 
 		       CASE "EDIT CONTACT"
 
 			       AGEditContact
+			       Save
 
 		       'SHOW ONLY ONE CONTACT INFORMATION
 			CASE "SHOW CONTACT", "SHOW A CONTACT", "SEE CONTACT"
@@ -528,14 +529,16 @@ COLOR 7
 			CASE "SET REMINDER", "ADD REMINDER", "REMINDER", "REMIND ME OF SOMETHING", "REMIND ME", "REMEMBER", "REMEMBER SOMETHING", "NEW REMINDER"
 
 				RMRemindMe
+				Save
 
 			CASE "SHOW REMINDERS", "SHO REMINDERS", "SEE REMINDERS", "SHOW ME THE REMINDERS", "SHOW REMINDERS", "SHOW ME REMINDERS"
 
 				RMShowReminders
-
+				
 			CASE "EDIT REMINDER", "EDIT REMINDERS"
 
 				EditReminder
+				Save
 
 			CASE "REMINDERS"
 
@@ -546,29 +549,29 @@ COLOR 7
 				
 				PRINT "|REMIND ME| --> Adds a reminder. Reminds you of something important."
 				PRINT "|SHOW REMINDERS| --> Shows ALL the reminders stored in memory."
-				PRINT "|EDIT REMINDER| --> Edits and modifies an specific reminder."
 				PRINT "|DEL REMINDER| --> Deletes an specific reminder stored in memory."
 				PRINT "|FORGET REMINDERS| --> Deletes ALL the reminders stored in memory."
 
 				PRINT
 				
-			CASE "FORGET REMINDERS", "DELETE ALL REMINDERS", "DELETE ALL THE REMINDERS", "DELETE REMINDERS", "DEL REMINDERS"
+			CASE "FORGET REMINDERS", "DELETE ALL REMINDERS", "DELETE REMINDERS", "DEL REMINDERS"
 
 				RMForgetReminders
-				
+				Save
+
 			CASE "DEL REMINDER", "DELETE REMINDER"
 
 				RMDelReminder
-
+				
 			CASE "TASK", "NEW TASK", "REMIND ME OF AN IMPORTAN TASK", "IMPORTANT TASK"
 			
 				WriteTasks
-				
+				Save
 
 			CASE "WHAT DO YOU HAVE FOR ME", "REPORT"
 			
 
-				IF REMINDER(0) = "" AND REMINDER(1) = "" AND REMINDER(2) = "" AND REMINDER(5) = "" AND REMINDER(7) = "" THEN
+				IF Reminder(0) = "" AND Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
 
 					PRINT "I don't have any reminders for you."
 
@@ -596,7 +599,7 @@ COLOR 7
 			
 				ForgetTasks
 				PRINT "Right! I forgot the tasks."
-			
+				
 			CASE "FORGET ALL", "FORGET", "FORGET EVERYTHING", "DELETE ALL"
 				
 				RMForgetReminders
@@ -1397,35 +1400,33 @@ SUB EditReminder
 
 	COLOR 7
 	PRINT "What reminder would you like to EDIT?"
-	
+	PRINT " Input its slot number."
+
 	RMShowReminders
 
 	COLOR 7
-	INPUT "* ", SlotNumber
+	INPUT "* "; SlotNumber
 
 
-	IF SlotNumber > ReminderStorage OR SlotNumber < 0 THEN
+	IF SlotNumber > ReminderStorage THEN
 
-		PRINT "- Slot number OUT OF RANGE! Number too big or below zero. Remember that"
-		PRINT "  the maximum storage available for reminders is"; (ReminderStorage - 1); ". Try again."
+		PRINT "- That number is too big. Try again."
 		GOTO EditReminderEnd
 
 	END IF
 
-	IF NOT REMINDER(SlotNumer) = "" THEN
+	IF NOT Reminder(SlotNumer) = "" THEN
 
-		PRINT
-		COLOR 9
 		PRINT "|";
-		PRINT SlotNumber; "| "; REMINDER(SlotNumber)
+		PRINT SlotNumber; "| "; Reminder(SlotNumber)
 
 		PRINT
 
 		COLOR 7
 		PRINT "Edit reminder: "
-		LINE INPUT "*"; REMINDER(SlotNumber)
+		LINE INPUT "*"; Reminder(SlotNumber)
 		PRINT
-		PRINT "Ok, I will remind you the next: "; REMINDER(SlotNumber)
+		PRINT "Ok, I will remind you the next: "; Reminder(SlotNumber)
 
 	ELSE
 
@@ -1610,7 +1611,7 @@ OPEN "brain.dat" FOR INPUT AS #1
 
 FOR i = 0 TO ReminderStorage
 
-	INPUT #1, REMINDER(i)
+	INPUT #1, Reminder(i)
 	
 NEXT i
 
@@ -1675,6 +1676,8 @@ SUB Notes
 
 ' TO DO
 
+'- CONTINUE WORKING ON [EDIT REMINDERS FEATURE]
+
 '- TAGS --> Improve the addition of TAGS.
 '- TAGS --> Solve some bugs.
 
@@ -1704,8 +1707,6 @@ SUB Notes
 '- REMINDERS: New CONSTANT called ReminderStorage (MAX NUMBER OF REMINDERS).
 '- REMINDERS: Use |REMINDERS| to show a list with the different keywords
 '  and commands available to deal with reminders.
-'- REMINDERS: Error message when trying to EDIT or DELETE slots out of range,
-'  below zero or exceding the limit of storage.
 
 '- Show BIRTHDAYS in the right alphabetical order. SORT A-Z.
 
@@ -1817,9 +1818,9 @@ SUB RMDelReminder
 	PRINT " Slot number?"
 	INPUT "* ", SlotNumber
 
-	IF SlotNumber >= ReminderStorage OR SlotNumber < 0 THEN
+	IF SlotNumber > ReminderStorage THEN
 
-		PRINT "- Slot number OUT OF RANGE! Imposible to access something that doesn't"
+		PRINT "- Slot number is OUT OF RANGE! Imposible to access something that doesn't"
 		PRINT "  exist! Try again using a reasonable value."
 
 	       GOTO EndSubRMDelReminder
@@ -1827,9 +1828,9 @@ SUB RMDelReminder
 	END IF
 
 
-	IF NOT REMINDER(SlotNumber) = "" THEN
+	IF NOT Reminder(SlotNumber) = "" THEN
 
-		REMINDER(SlotNumber) = ""
+		Reminder(SlotNumber) = ""
 		PRINT "- Reminder at slot"; SlotNumber; "has been deleted!"
 
 	ELSE
@@ -1858,7 +1859,7 @@ SELECT CASE UserInput
 
 		FOR i = 0 TO ReminderStorage
 		
-			REMINDER(i) = ""
+			Reminder(i) = ""
 			
 		NEXT i
 
@@ -1875,20 +1876,19 @@ END SUB
 SUB RMRemindMe
 'Remind me command
 
-
 	FOR i = 0 TO ReminderStorage 'Looks for the nearest available empty slot
 
-		IF i >= ReminderStorage THEN
+		IF i = ReminderStorage THEN
 
 			PRINT " There are no empty slots to store more reminders. Please, try to"
-			PRINT " delete some older reminders in order to continue adding new ones."
+			PRINT "  delete some older reminders in order to continue adding new ones."
 
 			GOTO EndSubRemindMe
 			
 		END IF
 
 
-		IF REMINDER(i) = "" THEN
+		IF Reminder(i) = "" THEN
 
 			EXIT FOR
 
@@ -1897,9 +1897,9 @@ SUB RMRemindMe
 	NEXT i
 
 	PRINT "What should I remind you of?"
-	LINE INPUT REMINDER(i)
+	LINE INPUT Reminder(i)
 
-	PRINT "Ok, I will remind you the next: "; REMINDER(i)
+	PRINT "Ok, I will remind you the next: "; Reminder(i)
 
 EndSubRemindMe:
 END SUB
@@ -1912,7 +1912,7 @@ NoReminders = 0
 
 FOR i = 0 TO ReminderStorage
 
-	IF NOT REMINDER(i) = "" THEN
+	IF NOT Reminder(i) = "" THEN
 
 	  NoReminders = 1  'means there are reminders available.
 
@@ -1930,10 +1930,10 @@ IF NoReminders = 1 THEN  'If there are reminders stored in memory...
 	COLOR 9
 	DO UNTIL counter = ReminderStorage
 
-		IF NOT REMINDER(counter) = "" THEN
+		IF NOT Reminder(counter) = "" THEN
 
 			PRINT "|";
-			PRINT counter; "| "; REMINDER(counter)
+			PRINT counter; "| "; Reminder(counter)
 
 		END IF
 
@@ -1979,7 +1979,7 @@ OPEN "brain.dat" FOR OUTPUT AS #1
 
 FOR i = 0 TO ReminderStorage
 
-	WRITE #1, REMINDER(i)
+	WRITE #1, Reminder(i)
 	
 NEXT i
 
