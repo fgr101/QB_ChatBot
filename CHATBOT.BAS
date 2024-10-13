@@ -70,11 +70,13 @@ DIM SHARED TaskNumber AS INTEGER
 
 DIM SHARED Reminder(20) AS STRING
 DIM SHARED ReminderNumber AS INTEGER
+DIM SHARED SlotNumber AS INTEGER
 DIM SHARED Task(25) AS STRING
 DIM SHARED again AS STRING
 
 'CONSTANT VALUES & SWITCHS ==================================================
 
+DIM SkipLoad AS INTEGER 'Skips LOAD when creating BRAIN.DAT for the first time
 DIM SHARED AgendaStorage AS INTEGER
 DIM SHARED TagStorage AS INTEGER
 DIM SHARED ReminderStorage AS INTEGER
@@ -158,7 +160,7 @@ IF LOF(1) = 0 THEN
 	LOOP
 	
 	PRINT "brain.dat File created."
-
+	
 	SkipLoad = 1
 
 END IF
@@ -1430,7 +1432,7 @@ SUB EditReminder
 
 	END IF
 
-	IF NOT Reminder(SlotNumer) = "" THEN
+	IF NOT Reminder(SlotNumber) = "" THEN
 
 		PRINT "|";
 		PRINT SlotNumber; "| "; Reminder(SlotNumber)
@@ -1826,8 +1828,6 @@ END SUB
 
 SUB RMDelReminder
 'Deletes an specific reminder. Uses the slot number for that.
-
-	DIM SlotNumber AS INTEGER
 
 	PRINT " Slot number?"
 	INPUT "* ", SlotNumber
