@@ -1,3 +1,4 @@
+DECLARE SUB About ()
 DECLARE SUB EditReminder ()
 DECLARE SUB CalculateAge ()
 DECLARE SUB RMDelReminder ()
@@ -692,33 +693,8 @@ COLOR 7
 
 			CASE "ABOUT"
 
-				COLOR 10
-				PRINT
-				PRINT
-				PRINT "ArtInt QB ChatBot - V.0.3 [2020 - 2024]"
-				PRINT "---------------------------------------"
-				PRINT "This is an Open Source and Free Software."
-				PRINT "Made in Qbasic by Fernando Gaston Ramirez."
-				PRINT "Main concept idea and early version written in C++ in 2020."
-				PRINT "First Qbasic Version, created and rewritten in March 2023."
-				PRINT "Compiled for Win64 using the FreeBasic compiler."
-				PRINT "Last Update released in March 2023."
-				PRINT
-				PRINT "Memory and storage limits: "
-				PRINT
-				PRINT "* Reminders -->"; (ReminderStorage - 1)
-				PRINT
-				PRINT "======================================"
-				PRINT
-				PRINT "Contributors: "
-				PRINT
-				PRINT "Ahmad from Syria (Ahmad-511 on GitHub)"
-				PRINT
-				PRINT "======================================"
-				PRINT
-				PRINT "Thank you so much!"
-				PRINT
-
+				About
+			
 			CASE "END", "CLOSE", "BYE", "OK BYE", "EXIT"
 
 				PRINT "Bye! I hope to see you soon!"
@@ -738,6 +714,37 @@ COLOR 7
 '=============================================================================
 
 LOOP
+
+SUB About
+
+	COLOR 10
+	PRINT
+	PRINT
+	PRINT "ArtInt QB ChatBot - V.0.4 [2020 - 2024]"
+	PRINT "---------------------------------------"
+	PRINT "This is an Open Source and Free Software."
+	PRINT "Made in Qbasic by Fernando Gaston Ramirez."
+	PRINT "Main concept idea and early version written in C++ in 2020."
+	PRINT "First Qbasic Version, created and rewritten in March 2023."
+	PRINT "Compiled for Win64 using the FreeBasic compiler."
+	PRINT "Last Update released in March 2023."
+	PRINT
+	PRINT "Memory and storage limits: "
+	PRINT
+	PRINT "* Reminders -->"; (ReminderStorage - 1)
+	PRINT
+	PRINT "======================================"
+	PRINT
+	PRINT "Contributors: "
+	PRINT
+	PRINT "Ahmad from Syria (Ahmad-511 on GitHub)"
+	PRINT
+	PRINT "======================================"
+	PRINT
+	PRINT "Thank you so much!"
+	PRINT
+
+END SUB
 
 SUB AddTagNote 'ADD TAGGED NOTES
 
@@ -1706,17 +1713,19 @@ SUB Notes
 
 '- Add paragraph and information at the beginning of the code.
 '- Nuevos Comandos para borrar un tag especifico.
-'- The ChatBot is able to remember up to 10 different reminders.
-'- The ChatBot is able to forget these 10 reminders.
 '- The ChatBot tells you when there aren't any reminders for you.
 
 '=====================================================================
-
 ' DONE
 
 'V 0.4
 
+'- New SUBFUNCTION created for the ABOUT section. Section UPDATED.
+'- REMINDERS: Storage of reminders increased up to 19.
+'- SAVING improved. The program saves after you add or modifies reminders,
+'  tasks, birthdays, etc.
 '- REMINDERS: You can ADD a reminder.
+'- REMINDERS: You can delete all the reminders using FORGET REMINDERS.
 '- REMINDERS: You can DELETE an specific reminder.
 '- REMINDERS: New reminders always added in the nearest empty slot available.
 '- REMINDERS: SLOT NUMBERS shown along when using |SHOW REMINDERS|.
