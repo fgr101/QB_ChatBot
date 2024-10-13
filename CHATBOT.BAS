@@ -68,9 +68,9 @@ DIM SHARED TaskNumber AS INTEGER
 
 'Variables for reminders, tasks and notes.
 
-DIM SHARED Reminder(10) AS STRING
+DIM SHARED Reminder(20) AS STRING
 DIM SHARED ReminderNumber AS INTEGER
-DIM SHARED Task(10) AS STRING
+DIM SHARED Task(25) AS STRING
 DIM SHARED again AS STRING
 
 'CONSTANT VALUES & SWITCHS ==================================================
@@ -79,9 +79,10 @@ DIM SHARED AgendaStorage AS INTEGER
 DIM SHARED TagStorage AS INTEGER
 DIM SHARED ReminderStorage AS INTEGER
 
-AgendaStorage = 100   '--> MAXIMUM NUMBER OF CONTACTS STORAGE.
+AgendaStorage = 99   '--> MAXIMUM NUMBER OF CONTACTS STORAGE.
 TagStorage = 25       '--> MAXIMUM NUMBER OF TAGS.
-ReminderStorage = 10  '--> MAXIMUM NUMBER OF REMINDERS.
+ReminderStorage = 20  '--> MAXIMUM NUMBER OF REMINDERS.
+
 
 'Personal Contacts - AGENDA =================================================
 
@@ -140,6 +141,7 @@ AgendaID = 0
 'If FILES don't exist the program creates them. ++++++++++++++=++++++++++++++
 
 OPEN "brain.dat" FOR BINARY AS #1
+
 IF LOF(1) = 0 THEN
 
 	PRINT "Creating file brain.dat..."
@@ -148,14 +150,16 @@ IF LOF(1) = 0 THEN
 	OPEN "brain.dat" FOR OUTPUT AS #1
 
 	counter = 0
-	DO UNTIL counter = 20000
+	DO UNTIL counter = 10000
 
 		WRITE #1, ""
 		counter = counter + 1
 
 	LOOP
-
+	
 	PRINT "brain.dat File created."
+
+	SkipLoad = 1
 
 END IF
 
@@ -166,7 +170,11 @@ ReminderNumber = 0
 
 '=============================================================================
 
-Load
+IF SkipLoad = 0 THEN
+
+	Load
+
+END IF
 
 '=============================================================================
 
@@ -568,9 +576,8 @@ COLOR 7
 				WriteTasks
 				Save
 
-			CASE "WHAT DO YOU HAVE FOR ME", "REPORT"
+			CASE "WHAT DO YOU HAVE FOR ME", "REPORT", "SHOW ALL", "SHOW EVERYTHING"
 			
-
 				IF Reminder(0) = "" AND Reminder(1) = "" AND Reminder(2) = "" AND Reminder(5) = "" AND Reminder(7) = "" THEN
 
 					PRINT "I don't have any reminders for you."
@@ -686,7 +693,7 @@ COLOR 7
 				COLOR 10
 				PRINT
 				PRINT
-				PRINT "ArtInt QB ChatBot - V.0.3 [2020 - 2023]"
+				PRINT "ArtInt QB ChatBot - V.0.3 [2020 - 2024]"
 				PRINT "---------------------------------------"
 				PRINT "This is an Open Source and Free Software."
 				PRINT "Made in Qbasic by Fernando Gaston Ramirez."
@@ -695,9 +702,17 @@ COLOR 7
 				PRINT "Compiled for Win64 using the FreeBasic compiler."
 				PRINT "Last Update released in March 2023."
 				PRINT
+				PRINT "Memory and storage limits: "
+				PRINT
+				PRINT "* Reminders -->"; (ReminderStorage - 1)
+				PRINT
+				PRINT "======================================"
+				PRINT
 				PRINT "Contributors: "
 				PRINT
 				PRINT "Ahmad from Syria (Ahmad-511 on GitHub)"
+				PRINT
+				PRINT "======================================"
 				PRINT
 				PRINT "Thank you so much!"
 				PRINT
@@ -1603,13 +1618,12 @@ SUB Load
 
 '====================== LOAD ======================
 'LOADS SAVED variables FROM the brain.dat file.
-'
 
 OPEN "brain.dat" FOR INPUT AS #1
 
 '================ LOADING REMINDERS
 
-FOR i = 0 TO ReminderStorage
+FOR i = 0 TO (ReminderStorage - 1)
 
 	INPUT #1, Reminder(i)
 	
@@ -1617,7 +1631,7 @@ NEXT i
 
 '================ LOADING TASKS
 
-FOR i = 0 TO 10
+FOR i = 0 TO 20
 
 	INPUT #1, Task(i)
 	
@@ -1627,7 +1641,7 @@ NEXT i
 
 INPUT #1, AgendaID
 
-FOR i = 0 TO AgendaStorage
+FOR i = 0 TO (AgendaStorage - 1)
 
 	INPUT #1, AgendaName(i)
 	INPUT #1, AgendaPhoneNumber(i)
@@ -1641,7 +1655,7 @@ NEXT i
 
 INPUT #1, TagNumber
 
-FOR i = 0 TO TagStorage
+FOR i = 0 TO (TagStorage - 1)
 
 	INPUT #1, Tagname(i)
 
@@ -1655,7 +1669,7 @@ NEXT i
 
 '============================ LOADING BIRTHDAYS
 
-FOR i = 0 TO AgendaStorage
+FOR i = 0 TO (AgendaStorage - 1)
 
 	INPUT #1, NameBirth(i)
 	INPUT #1, LastNameBirth(i)
@@ -2023,7 +2037,7 @@ NEXT i
 
 '===================================== SAVING BIRTHDAYS
 
-FOR i = 0 TO AgendaStorage
+FOR i = 0 TO (AgendaStorage + 1)
 
 	WRITE #1, NameBirth(i)
 	WRITE #1, LastNameBirth(i)
